@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+# NOTE: brought from rbenv https://github.com/sstephenson/rbenv/blob/master/libexec/rbenv-which
+expand_path() {
+  if [ ! -d "$1" ]; then
+    return 1
+  fi
+
+  local cwd="$(pwd)"
+  cd "$1"
+  pwd
+  cd "$cwd"
+}
+
+remove_from_path() {
+  local path_to_remove="$(expand_path "$1")"
+  local result=""
+
+  if [ -z "$path_to_remove" ]; then
+    echo "${PATH}"
+    return
+  fi
+
+  local paths
+  IFS=: paths=($PATH)
+
+  for path in "${paths[@]}"; do
+    path="$(expand_path "$path" || true)"
+    if [ -n "$path" ] && [ "$path" != "$path_to_remove" ]; then
+      result="${result}${path}:"
+    fi
+  done
+
+  echo "${result%:}"
+}
+
+program="${0##*/}"
+param="$@"
+name=$(echo "$@" | sed -e "s/^[^{]*{\(.\+\)}[^}]*$/\1/")
+
+paths=$(remove_from_path "$HOME/.funl/")
+
+bin_path=$(PATH=$paths which $program)
+if [ -z "$bin_path" ]; then
+  exit 1
+fi
+
+if [ "$param" = "$name" ] || [ "$name" != 'branch' ]; then
+  exec -a "$program" "$bin_path" "$@"
+else
+  sel=$(git for-each-ref --sort=-committerdate refs/heads/ | cut -f2 | sed 's/refs\/heads\///g' | peco | xargs echo)
+  arg="s|{$name}|$sel|"
+  cmd=$(echo "$@" | sed "$arg")
+  exec -a "$program" $bin_path $cmd
+fi
