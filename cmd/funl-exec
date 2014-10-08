@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+path_remove() {
+  echo -n $1 | awk -v RS=: -v ORS=: '$0 != "'$2'"' | sed 's/:$//'
+}
+
+shift
+
+if [[ 0 -eq $# ]]; then
+  exit 1
+fi
+
+bin_dir=$(dirname $(command which funl))
+new_path=$(path_remove $PATH $bin_dir)
+
+hooks_dir="$(dirname $bin_dir)/hooks"
+new_path=$(path_remove $new_path $hooks_dir)
+
+PATH=$new_path exec -a "$1" $@

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
+hooks=$(command ls -1 $hooks_dir | grep -v funl)
+
+if [[ -z $hooks ]]; then
+  echo "funl: no hooks registered"
+else
+  echo -e "$hooks"
+fi

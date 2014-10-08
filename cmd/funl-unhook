@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+set -e
+
+shift
+
+if [[ 0 -eq $# ]]; then
+  echo "usage: funl unhook <name>" >&2
+  exit 1
+fi
+
+hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
+hook_path="$hooks_dir/$1"
+
+if [[ ! -e $hook_path ]]; then
+  echo "funl: '$1' isn't registered as hook" >&2
+  exit 1
+fi
+
+rm -f $hook_path

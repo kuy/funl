@@ -1,0 +1,2 @@
+branch: git for-each-ref --sort=-committerdate refs/heads/ | cut -f2 | sed 's/refs\/heads\///g'
+b: &branch

@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ 0 -eq $# ]]; then
+  echo "funl 0.0.0" >&2
+  echo "usage: $ funl <command> [...]" >&2
+  echo "<command>: list, hook, unhook" >&2
+  exit 1
+fi
+
+root_dir=$(dirname $(dirname $(command which funl)))
+cmd_dir="$root_dir/cmd"
+cmd_path="$cmd_dir/funl-$1"
+
+if [[ ! -x $cmd_path ]]; then
+  echo "funl: '$1' is not a funl command" >&2
+  exit 1
+fi
+
+exec "$cmd_path" $@
