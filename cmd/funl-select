@@ -9,7 +9,7 @@ fi
 selected=$(git for-each-ref --sort=-committerdate refs/heads/ | cut -f2 | sed 's/refs\/heads\///g' | peco)
 
 if [[ 0 -ne $? ]]; then
-  exit $?
+  exit 1
 fi
 
-echo -e "$selected"
+echo "$selected"

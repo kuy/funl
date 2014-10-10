@@ -3,7 +3,6 @@
 set -e
 
 shift
-
 if [[ 0 -eq $# ]]; then
   echo "usage: funl hook <name>" >&2
   echo "e.g. git, ssh, kill" >&2
@@ -11,23 +10,21 @@ if [[ 0 -eq $# ]]; then
 fi
 
 hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
-
-
 if [[ ! -d $hooks_dir ]]; then
   mkdir $hooks_dir
 fi
 
 hook_path="$hooks_dir/$1"
-
 if [[ -e $hook_path ]]; then
   echo "funl: '$1' is already hooked" >&2
   exit 1
 fi
 
-cat << EOS > "$hook_path"
+cat << SCRIPT > "$hook_path"
 #!/usr/bin/env bash
 
-exec funl proc $1 \$@
-EOS
+# XXX: Should I wrap \$1 with double-quotes?
+exec funl proc $1 "\$@"
+SCRIPT
 
 chmod a+x "$hook_path"

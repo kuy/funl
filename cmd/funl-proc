@@ -5,20 +5,28 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-# TODO: Support multiple placeholders
-params="$@"
-name=$(echo "$@" | sed -e 's/^[^{]*{\([^}][^}]*\)}[^}]*$/\1/')
+idx=0
+params=
+for param in "$@"; do
+  name=$(echo "$param" | sed -e 's/^[^{]*{\([^}][^}]*\)}[^}]*$/\1/')
 
-if [[ $params != $name ]]; then
-  selected=$(funl select $name)
+  if [[ $name == $param ]]; then
+    params[$idx]="$param"
+  else
+    choice=$(funl select $name)
 
-  if [[ 0 -ne $? ]]; then
-    echo "funl: not selected, abort" >&2
-    exit $?
+    if [[ 0 -ne $? ]]; then
+      echo "funl: not selected, abort" >&2
+      exit 1
+    fi
+
+    script="s;{$name};$choice;g"
+    params[$idx]=$(echo "$param" | sed "$script")
   fi
 
-  script="s|{$name}|$selected|"
-  params=$(echo "$@" | sed "$script")
-fi
+  ((idx++))
+done
 
-exec funl exec $params
+set -- "${params[@]}"
+
+exec funl exec "$@"

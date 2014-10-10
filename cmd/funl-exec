@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 
 path_remove() {
-  echo -n $1 | awk -v RS=: -v ORS=: '$0 != "'$2'"' | sed 's/:$//'
+  local paths=$PATH
+  while [[ 0 -lt $# ]]
+  do
+    paths=$(echo -n $paths | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//')
+    shift
+  done
+  echo $paths
 }
 
 shift
-
 if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
 bin_dir=$(dirname $(command which funl))
-new_path=$(path_remove $PATH $bin_dir)
-
 hooks_dir="$(dirname $bin_dir)/hooks"
-new_path=$(path_remove $new_path $hooks_dir)
+new_path=$(path_remove $bin_dir $hooks_dir)
 
-PATH=$new_path exec -a "$1" $@
+# echo "EXEC: $#: $@"
+# echo "EXEC: $1 | $2 | $3 | $4 | $5 | $6"
+
+PATH=$new_path exec "$@"
