@@ -1,5 +1,18 @@
 #!/usr/bin/env bash
 
+content=$(cat <<HELP
+Usage: funl list [-1]
+
+Lists all registered hook names.
+If '-1' option is specified, funl lists one name per one line.
+HELP)
+
+shift
+if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+  echo -e "$content"
+  exit 0
+fi
+
 hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
 hooks=$(command ls -1 $hooks_dir | grep -v funl)
 

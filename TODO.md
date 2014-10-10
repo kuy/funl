@@ -9,13 +9,12 @@ TODO
 
 ## Must
 
-- Graceful failure on cancel in peco
-- `funl --help`, `funl -h`
-- `funl --version`
 - Bulk register
   - `funl hook foo bar`
 - Bulk unregister
   - `funl unhook foo bar`
+- Option to unregister all hooks
+  - `funl unhook --all`
 - Write test codes
   - shunit2: https://code.google.com/p/shunit2/
   - BATS: https://github.com/sstephenson/bats

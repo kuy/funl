@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+set -e
+
+content=$(cat <<HELP
+Usage: funl <command> [...]
+
+Here are available commands:
+
+     list: List all registered hook names
+     hook: Register a hook of the given executable
+   unhook: Unregister a hook
+  version: Show version information
+     help: Displays help contents
+
+Use 'funl help <command>' for more information of specific command.
+HELP)
+
+shift
+if [[ ! -z $1 ]]; then
+  echo -ne "$(funl $1 -h)"
+else
+  echo -e "$content"
+fi

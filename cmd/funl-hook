@@ -2,11 +2,22 @@
 
 set -e
 
+content=$(cat <<HELP
+Usage: funl hook <name>
+
+Registers a hook of the given executable, such as builtin command,
+program, and shell script.
+HELP)
+
 shift
 if [[ 0 -eq $# ]]; then
-  echo "usage: funl hook <name>" >&2
-  echo "e.g. git, ssh, kill" >&2
+  echo -e "$content" >&2
   exit 1
+fi
+
+if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+  echo -e "$content"
+  exit 0
 fi
 
 hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
@@ -20,7 +31,7 @@ if [[ -e $hook_path ]]; then
   exit 1
 fi
 
-cat << SCRIPT > "$hook_path"
+cat <<SCRIPT > "$hook_path"
 #!/usr/bin/env bash
 
 # XXX: Should I wrap \$1 with double-quotes?

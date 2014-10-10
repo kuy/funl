@@ -3,15 +3,23 @@
 set -e
 
 if [[ 0 -eq $# ]]; then
-  echo "funl 0.0.0" >&2
-  echo "usage: $ funl <command> [...]" >&2
-  echo "<command>: list, hook, unhook" >&2
+  echo "$(funl version)" >&2
+  echo "$(funl help)" >&2
   exit 1
 fi
 
+if [[ $1 == '--version' ]]; then
+  echo "$(funl version)"
+  exit 0
+fi
+
+if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+  echo -e "$(funl help)"
+  exit 0
+fi
+
 root_dir=$(dirname $(dirname $(command which funl)))
-cmd_dir="$root_dir/cmd"
-cmd_path="$cmd_dir/funl-$1"
+cmd_path="$root_dir/cmd/funl-$1"
 
 if [[ ! -x $cmd_path ]]; then
   echo "funl: '$1' is not a funl command" >&2
