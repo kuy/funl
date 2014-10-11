@@ -9,6 +9,10 @@ TODO
 
 ## Must
 
+- Prepare config system
+  - `.funlrc` file in home dir
+  - `source`: command line which generates choices for peco/percol
+  - `post`: command line which does post-processing after peco/percol
 - Bulk register
   - `funl hook foo bar`
 - Bulk unregister
@@ -20,7 +24,7 @@ TODO
   - BATS: https://github.com/sstephenson/bats
 - Running tests using Travis CI on other platforms
 - Support peco and percol
-  - Auto detection
+  - Auto detection or .funlrc file
 - Compare execution time of `funl git` and normal `git`
 
 ## Wish

@@ -5,9 +5,13 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-# TODO: Support both peco and percol (self-modifying for speed?)
-selected=$(git for-each-ref --sort=-committerdate refs/heads/ | cut -f2 | sed 's/refs\/heads\///g' | peco)
+src=$(funl config $1)
+if [[ 0 -ne $? ]]; then
+  exit 1
+fi
 
+# TODO: Support both peco and percol (self-modifying for speed?)
+selected=$(eval "$src | peco")
 if [[ 0 -ne $? ]]; then
   exit 1
 fi

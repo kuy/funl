@@ -5,13 +5,13 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-idx=0
+i=0
 params=
 for param in "$@"; do
   name=$(echo "$param" | sed -e 's/^[^{]*{\([^}][^}]*\)}[^}]*$/\1/')
 
   if [[ $name == $param ]]; then
-    params[$idx]="$param"
+    params[$i]="$param"
   else
     choice=$(funl select $name)
 
@@ -21,10 +21,10 @@ for param in "$@"; do
     fi
 
     script="s;{$name};$choice;g"
-    params[$idx]=$(echo "$param" | sed "$script")
+    params[$i]=$(echo "$param" | sed "$script")
   fi
 
-  ((idx++))
+  (( i ++ ))
 done
 
 set -- "${params[@]}"
