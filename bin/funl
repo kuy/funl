@@ -3,9 +3,9 @@
 set -e
 
 if [[ 0 -eq $# ]]; then
-  echo "$(funl version)" >&2
-  echo "$(funl help)" >&2
-  exit 1
+  echo "$(funl version)"
+  echo -e "$(funl help)"
+  exit 0
 fi
 
 if [[ $1 == '--version' ]]; then

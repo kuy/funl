@@ -18,7 +18,11 @@ HELP)
 
 shift
 if [[ ! -z $1 ]]; then
-  echo -ne "$(funl $1 -h)"
-else
-  echo -e "$content"
+  content=$(funl $1 -h)
+  if [[ 0 -ne $? ]]; then
+    echo "$content" >&2
+    exit 1
+  fi
 fi
+
+echo -e "$content"
