@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "no arguments prints usage overview" {
   run funl help
   [ "$status" -eq 0 ]

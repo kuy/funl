@@ -1,5 +1,7 @@
 #!/usr/bin/env bats
 
+load test_helper
+
 @test "no arguments prints version number" {
   run funl version
   [ "$status" -eq 0 ]

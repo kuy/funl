@@ -25,7 +25,7 @@ if [[ -z $FUNL_HOOKS ]]; then
 fi
 
 if [[ ! -d $FUNL_HOOKS ]]; then
-  mkdir "$FUNL_HOOKS"
+  mkdir -p "$FUNL_HOOKS"
 fi
 
 hook_path="$FUNL_HOOKS/$1"

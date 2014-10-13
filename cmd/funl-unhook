@@ -2,11 +2,21 @@
 
 set -e
 
-shift
+content=$(cat <<HELP
+Usage: funl unhook <name>
 
+Unregisters a hook of the given name.
+HELP)
+
+shift
 if [[ 0 -eq $# ]]; then
-  echo "usage: funl unhook <name>" >&2
+  echo -e "$content" >&2
   exit 1
+fi
+
+if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+  echo -e "$content"
+  exit 0
 fi
 
 if [[ -z $FUNL_HOOKS ]]; then

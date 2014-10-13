@@ -10,12 +10,15 @@ TODO
 - Prepare config file
   - `post`: command line which does post-processing after peco/percol
 - Improve test coverage
-- Bulk register
+- [list] Add '-1' option
+  - Prints one name per one line
+- [hook] Raise warning if given command does not exist
+- [hook] Add '-f' option to ignore warning
+- [hook] Bulk register
   - `funl hook foo bar`
-- Bulk unregister
+- [unhook] Add '--all' option to unregister all hooks at once
+- [unhook] Bulk unregister
   - `funl unhook foo bar`
-- Option to unregister all hooks
-  - `funl unhook --all`
 - Running tests using Travis CI on other platforms
 - Support both peco and percol
   - Auto detection or configuration in .funlrc file
