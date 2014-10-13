@@ -20,22 +20,25 @@ if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
   exit 0
 fi
 
-hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
-if [[ ! -d $hooks_dir ]]; then
-  mkdir $hooks_dir
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-hook_path="$hooks_dir/$1"
+if [[ ! -d $FUNL_HOOKS ]]; then
+  mkdir "$FUNL_HOOKS"
+fi
+
+hook_path="$FUNL_HOOKS/$1"
 if [[ -e $hook_path ]]; then
   echo "funl: '$1' is already hooked" >&2
   exit 1
 fi
 
-cat <<SCRIPT > "$hook_path"
+cat <<SH > "$hook_path"
 #!/usr/bin/env bash
 
 # XXX: Should I wrap \$1 with double-quotes?
 exec funl proc $1 "\$@"
-SCRIPT
+SH
 
 chmod a+x "$hook_path"

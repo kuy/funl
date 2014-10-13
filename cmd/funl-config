@@ -5,8 +5,11 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-rc_path="$HOME/.funlrc"
-line=$(cat "$rc_path" | grep -E "^$1\\.src:" | head -n 1)
+if [[ -z $FUNL_CONFIG ]]; then
+  FUNL_CONFIG="$HOME/.funlrc"
+fi
+
+line=$(cat "$FUNL_CONFIG" | grep -E "^$1\\.src:" | head -n 1)
 if [[ -z $line ]]; then
   echo "funl: placeholder '$1' is not defined" >&2
   exit 1

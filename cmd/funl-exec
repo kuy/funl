@@ -7,7 +7,7 @@ path_remove() {
     paths=$(echo -n $paths | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//')
     shift
   done
-  echo $paths
+  echo "$paths"
 }
 
 shift
@@ -15,9 +15,13 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-bin_dir=$(dirname $(command which funl))
-hooks_dir="$(dirname $bin_dir)/hooks"
-new_path=$(path_remove $bin_dir $hooks_dir)
+bin_dir="$FUNL_ROOT/bin"
+
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
+fi
+
+new_path=$(path_remove "$bin_dir" "$FUNL_HOOKS")
 
 # echo "EXEC: $#: $@"
 # echo "EXEC: $1 | $2 | $3 | $4 | $5 | $6"

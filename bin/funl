@@ -18,8 +18,14 @@ if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
   exit 0
 fi
 
-root_dir=$(dirname $(dirname $(command which funl)))
-cmd_path="$root_dir/cmd/funl-$1"
+if [[ -z $FUNL_ROOT ]]; then
+  FUNL_ROOT=$(dirname $(dirname $(command which funl)))
+else
+  FUNL_ROOT=${FUNL_ROOT%/}
+fi
+export FUNL_ROOT
+
+cmd_path="${FUNL_ROOT}/cmd/funl-$1"
 
 if [[ ! -x $cmd_path ]]; then
   echo "funl: '$1' is not a funl command" >&2

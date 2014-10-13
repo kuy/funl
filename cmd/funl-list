@@ -13,11 +13,14 @@ if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
   exit 0
 fi
 
-hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
-hooks=$(command ls -1 $hooks_dir | grep -v funl)
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
+fi
+
+hooks=$(command ls -m "$FUNL_HOOKS" | grep -v funl)
 
 if [[ -z $hooks ]]; then
   echo "funl: no hooks registered"
 else
-  echo -e "$hooks"
+  echo "$hooks"
 fi

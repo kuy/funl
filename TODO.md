@@ -6,10 +6,10 @@ TODO
 ## Must
 
 - Improve help content of individual commands
-- Prepare config system
+- `funl list` should print sorted commands for consistency
+- Prepare config file
   - `post`: command line which does post-processing after peco/percol
 - Improve test coverage
-- Introduce `FUNL_DIR` to use it after exec
 - Bulk register
   - `funl hook foo bar`
 - Bulk unregister

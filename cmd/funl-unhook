@@ -9,12 +9,15 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-hooks_dir="$(dirname $(dirname $(command which funl)))/hooks"
-hook_path="$hooks_dir/$1"
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
+fi
+
+hook_path="$FUNL_HOOKS/$1"
 
 if [[ ! -e $hook_path ]]; then
   echo "funl: '$1' isn't registered as hook" >&2
   exit 1
 fi
 
-rm -f $hook_path
+rm -f "$hook_path"
