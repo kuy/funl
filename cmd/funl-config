@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 shift
-if [[ 0 -eq $# ]]; then
+if [[ 2 -ne $# ]]; then
   exit 1
 fi
 
@@ -9,12 +9,23 @@ if [[ -z $FUNL_CONFIG ]]; then
   FUNL_CONFIG="$HOME/.funlrc"
 fi
 
-line=$(cat "$FUNL_CONFIG" | grep -E "^$1\\.src:" | head -n 1)
-if [[ -z $line ]]; then
-  echo "funl: placeholder '$1' is not defined" >&2
+if [[ ! -e $FUNL_CONFIG ]]; then
+  echo "funl: config not found" >&2
   exit 1
 fi
 
-line=$(echo "$line" | sed -e "s/$1.src:[ ]*//")
+line=$(cat "$FUNL_CONFIG" | grep -E "^$1\\.$2 *:" | head -n 1)
+if [[ -z $line ]]; then
+  if [[ $2 == "src" ]]; then
+    # 'src' definition is required
+    echo "funl: 'src' definition is required (missing '$1.$2')" >&2
+    exit 1
+  else
+    # other ('post', ...) definitions are optional
+    exit 0
+  fi
+fi
+
+line=$(echo "$line" | sed -e "s/$1.$2 *: *//")
 
 echo "$line"

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+shift
+if [[ 2 -ne $# ]]; then
+  exit 1
+fi
+
+post=$(funl config "$1" "post")
+if [[ 0 -ne $? ]]; then
+  exit 1
+fi
+
+if [[ -z $post ]]; then
+  echo "$2"
+  exit 0
+fi
+
+processed=$(eval "echo \"$2\" | $post")
+if [[ 0 -ne $? ]]; then
+  exit 1
+fi
+
+echo "$processed"

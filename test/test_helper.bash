@@ -1,9 +1,9 @@
 FUNL_TEST_DIR="${BATS_TMPDIR}/funl"
 
-if [ "$FUNL_ROOT" != "${FUNL_TEST_DIR}/root" ]; then
+if [ "$HOME" != "${FUNL_TEST_DIR}/home" ]; then
   export FUNL_ROOT=$(cd "${BATS_TEST_DIRNAME}/.."; pwd)
   export FUNL_HOOKS="$FUNL_TEST_DIR/hooks"
-  export FUNL_CONFIG="$FUNL_TEST_DIR/funlrc"
+  export HOME="$FUNL_TEST_DIR/home"
 
   PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin
   PATH="${FUNL_ROOT}/bin:$PATH"
