@@ -4,7 +4,7 @@ load test_helper
 
 setup() {
   mkdir -p "$HOME"
-  mkdir -p "$FUNL_TEST_BIN"
+  mkdir -p "$FUNL_STUB_BIN"
 }
 
 prepare_config() {

@@ -19,7 +19,7 @@ USAGE
 }
 
 @test "unregisters a hook well" {
-  [ -x "${FUNL_HOOKS}/foo" ]
+  [ -e "${FUNL_HOOKS}/foo" ]
   run funl unhook foo
   [ "$status" -eq 0 ]
   [ -z "$output" ]

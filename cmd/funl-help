@@ -14,7 +14,8 @@ Here are available commands:
      help: Displays help contents
 
 Use 'funl help <command>' for more information of specific command.
-HELP)
+HELP
+)
 
 shift
 if [[ ! -z $1 ]]; then

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
+fi
+
+if [[ ! -d $FUNL_HOOKS ]]; then
+  command mkdir -p "$FUNL_HOOKS"
+fi
+
+funcs="$(funl rehash)"
+if [[ ! -z $funcs ]]; then
+  echo -e "$funcs"
+fi

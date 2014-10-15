@@ -5,7 +5,8 @@ Usage: funl list [-1]
 
 Lists all registered hook names.
 If '-1' option is specified, funl lists one name per one line.
-HELP)
+HELP
+)
 
 shift
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then

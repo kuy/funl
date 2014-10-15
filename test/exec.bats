@@ -2,10 +2,6 @@
 
 load test_helper
 
-setup() {
-  mkdir -p "$FUNL_HOOKS"
-}
-
 @test "no arguments prints nothing" {
   run funl exec
   [ "$status" -ne 0 ]

@@ -6,7 +6,8 @@ content=$(cat <<HELP
 Usage: funl unhook <name>
 
 Unregisters a hook of the given name.
-HELP)
+HELP
+)
 
 shift
 if [[ 0 -eq $# ]]; then

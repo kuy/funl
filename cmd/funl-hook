@@ -3,11 +3,15 @@
 set -e
 
 content=$(cat <<HELP
-Usage: funl hook <name>
+Usage: funl hook [-e] <name>...
 
-Registers a hook of the given executable, such as builtin command,
+Registers hooks of the given executable, such as builtin command,
 program, and shell script.
-HELP)
+
+'-e' option is useful to enable hooked command right now.
+e.g. $ eval "\$(funl hook -e git)"
+HELP
+)
 
 shift
 if [[ 0 -eq $# ]]; then
@@ -15,30 +19,36 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-  echo -e "$content"
-  exit 0
-fi
-
 if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-if [[ ! -d $FUNL_HOOKS ]]; then
-  mkdir -p "$FUNL_HOOKS"
-fi
+output=""
+while [[ $1 ]]; do
+  if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+    echo -e "$content"
+    exit 0
+  fi
 
-hook_path="$FUNL_HOOKS/$1"
-if [[ -e $hook_path ]]; then
-  echo "funl: '$1' is already hooked" >&2
-  exit 1
-fi
+  if [[ $1 == '-e' ]]; then
+    output="yes"
+    shift
+    continue
+  fi
 
-cat <<SH > "$hook_path"
-#!/usr/bin/env bash
+  hook_path="$FUNL_HOOKS/$1"
+  if [[ -e $hook_path ]]; then
+    echo "funl: '$1' is already hooked" >&2
+    exit 1
+  fi
 
-# XXX: Should I wrap \$1 with double-quotes?
-exec funl proc $1 "\$@"
+  cat <<SH > "$hook_path"
+# funl hook file for '$1' command
 SH
 
-chmod a+x "$hook_path"
+  if [[ $output == 'yes' ]]; then
+    echo -e "$(funl rehash --def $1)"
+  fi
+
+  shift
+done

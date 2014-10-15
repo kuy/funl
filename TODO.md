@@ -3,13 +3,13 @@ TODO
 
 ## Memo
 
-- 関数を定義してビルドインコマンドもフックする
-  - シェル起動時にhooksディレクトリにあるコマンド名をすべて関数として定義する
-  - 別のシェルで新しくフックが追加されても反映されないため、`funl refresh`で更新する
-    - zshとかのフックで自動的にrefreshできないか調べる
+- 別のシェルで新しくフックが追加されても反映されないため、`funl refresh`で更新する
+- zshとかのフックで自動的にrefreshできないか調べる
 
 ## Must
 
+- Implement alias for placeholders
+  - b: &branch
 - Running tests using Travis CI on other platforms
 - [list] Sort by name for consistent output
 - [list] Add '-1' option
@@ -24,8 +24,14 @@ TODO
 
 - Improve help content of individual commands
 
-## Wish
+## Idea/Wish
 
+- Context for placeholders
+  - differ between `kill {ps}` and `pkill {ps}`
+    - in `kill` command, {ps} will insert process ID
+    - in `pkill` command, {ps} will insert process name
+- Plugin mechanism for 'src' and 'post'
+  - Install plugins using `funl`
 - [hook] Raise warning if given command does not exist
 - [hook] Add '-f' option to ignore warning
 - [hook] Bulk register
