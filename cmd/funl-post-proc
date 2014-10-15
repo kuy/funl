@@ -15,7 +15,7 @@ if [[ -z $post ]]; then
   exit 0
 fi
 
-processed=$(eval "echo \"$2\" | $post")
+processed=$(eval "echo \"$2\" | $post" 2>&1)
 if [[ 0 -ne $? ]]; then
   exit 1
 fi

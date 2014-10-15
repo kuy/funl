@@ -14,16 +14,13 @@ for param in "$@"; do
     params[$i]="$param"
   else
     choice=$(funl select "$name")
-
     if [[ 0 -ne $? ]]; then
-      echo "funl: not selected, abort" >&2
       exit 1
     fi
 
     choice=$(funl post-proc "$name" "$choice")
-
     if [[ 0 -ne $? ]]; then
-      echo "funl: error occured in post-processing" >&2
+      echo "funl: error occured in post-process '$name.post'" >&2
       exit 1
     fi
 

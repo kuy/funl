@@ -2,8 +2,7 @@
 
 path_remove() {
   local paths=$PATH
-  while [[ 0 -lt $# ]]
-  do
+  while [[ 0 -lt $# ]]; do
     paths=$(echo -n $paths | awk -v RS=: -v ORS=: '$0 != "'$1'"' | sed 's/:$//')
     shift
   done
@@ -23,7 +22,10 @@ fi
 
 new_path=$(path_remove "$bin_dir" "$FUNL_HOOKS")
 
-# echo "EXEC: $#: $@"
-# echo "EXEC: $1 | $2 | $3 | $4 | $5 | $6"
+PATH=$new_path type "$@" >/dev/null 2>&1
+if [[ 0 -ne $? ]]; then
+  echo "funl: command not found: $1" >&2
+  exit 1
+fi
 
 PATH=$new_path exec "$@"

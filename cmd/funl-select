@@ -11,7 +11,7 @@ if [[ 0 -ne $? ]]; then
 fi
 
 # TODO: Support both peco and percol (self-modifying for speed?)
-selected=$(eval "$src | peco")
+selected=$(eval "$src | peco" 2>&1)
 if [[ 0 -ne $? ]]; then
   exit 1
 fi

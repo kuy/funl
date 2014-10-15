@@ -19,10 +19,27 @@ USAGE
 }
 
 @test "registers a hook well" {
-  run funl hook foo
+  mkdir -p "$FUNL_TEST_BIN"
+  stub_command 'nyan'
+  stub_peco 2
+
+  mkdir -p "$HOME"
+  cat <<RC > "$HOME/.funlrc"
+placeholder.src: echo -e "apple\nbanana\ncherry"
+RC
+
+  run nyan {placeholder} bla
+  [ "$status" -eq 0 ]
+  [ "$output" == "nyan: {placeholder} bla" ]
+
+  run funl hook nyan
   [ "$status" -eq 0 ]
   [ -z "$output" ]
-  [ -x "${FUNL_HOOKS}/foo" ]
+  [ -x "${FUNL_HOOKS}/nyan" ]
+
+  run nyan {placeholder} bla
+  [ "$status" -eq 0 ]
+  [ "$output" == "nyan: banana bla" ]
 }
 
 @test "already registered" {
