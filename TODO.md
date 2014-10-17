@@ -8,6 +8,8 @@ TODO
 
 ## Must
 
+- Show error message if peco is not installed
+  - Put guide to install peco in README.md
 - Implement alias for placeholders
   - b: &branch
 - Running tests using Travis CI on other platforms

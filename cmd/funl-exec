@@ -22,7 +22,7 @@ fi
 
 new_path=$(path_remove "$bin_dir" "$FUNL_HOOKS")
 
-PATH=$new_path type "$@" >/dev/null 2>&1
+$(PATH=$new_path type $1 >/dev/null 2>&1)
 if [[ 0 -ne $? ]]; then
   echo "funl: command not found: $1" >&2
   exit 1
