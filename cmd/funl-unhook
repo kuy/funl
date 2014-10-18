@@ -3,9 +3,12 @@
 set -e
 
 content=$(cat <<HELP
-Usage: funl unhook <name>
+Usage: funl unhook [-e] <name>...
 
-Unregisters a hook of the given name.
+Unregisters hooks of the given names.
+
+'-e' option can be used to reflect this to the current shell.
+e.g. $ eval "\$(funl unhook -e git)"
 HELP
 )
 
@@ -15,20 +18,34 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-  echo -e "$content"
-  exit 0
-fi
-
 if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-hook_path="$FUNL_HOOKS/$1"
+opt_eval=""
+while [[ $1 ]]; do
+  if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+    echo -e "$content"
+    exit 0
+  fi
 
-if [[ ! -e $hook_path ]]; then
-  echo "funl: '$1' isn't registered as hook" >&2
-  exit 1
-fi
+  if [[ $1 == '-e' ]]; then
+    opt_eval="yes"
+    shift
+    continue
+  fi
 
-rm -f "$hook_path"
+  hook_path="$FUNL_HOOKS/$1"
+  if [[ ! -e $hook_path ]]; then
+    echo "funl: '$1' isn't registered as hook" >&2
+    exit 1
+  fi
+
+  rm -f "$hook_path"
+
+  if [[ $opt_eval == 'yes' ]]; then
+    echo -e "$(funl rehash --undef $1)"
+  fi
+
+  shift
+done

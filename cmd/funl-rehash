@@ -12,11 +12,7 @@ is_banned() {
 }
 
 def_func() {
-  cat <<SH
-$1() {
-  funl proc $1 "\$@"
-}
-SH
+  echo "$1() { funl proc $1 \"\$@\" ; }"
 }
 
 undef_func() {

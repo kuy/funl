@@ -3,11 +3,15 @@ TODO
 
 ## Memo
 
+- .bashrcに定義した関数内で関数定義の文字列をevalするとその場で反映されることがわかった
+  - フック用のfunl関数をfunl initで仕込んで、funl hook/unhookのときだけevalしてその場で反映させる
+
 - 別のシェルで新しくフックが追加されても反映されないため、`funl refresh`で更新する
 - zshとかのフックで自動的にrefreshできないか調べる
 
 ## Must
 
+- Ignore placeholer if it's not defined
 - Show error message if peco is not installed
   - Put guide to install peco in README.md
 - Implement alias for placeholders
@@ -36,10 +40,6 @@ TODO
   - Install plugins using `funl`
 - [hook] Raise warning if given command does not exist
 - [hook] Add '-f' option to ignore warning
-- [hook] Bulk register
-  - `funl hook foo bar`
-- [unhook] Bulk unregister
-  - `funl unhook foo bar`
 - Compare execution time of `funl git` and normal `git`
 - Execute command in parallel using peco's multiple selection
 - Enable in-place selector like `funl unhook {hooks}`

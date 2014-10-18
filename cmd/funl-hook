@@ -8,7 +8,7 @@ Usage: funl hook [-e] <name>...
 Registers hooks of the given executable, such as builtin command,
 program, and shell script.
 
-'-e' option is useful to enable hooked command right now.
+'-e' option can be used to reflect this to the current shell.
 e.g. $ eval "\$(funl hook -e git)"
 HELP
 )
@@ -23,7 +23,7 @@ if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-output=""
+opt_eval=""
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
     echo -e "$content"
@@ -31,7 +31,7 @@ while [[ $1 ]]; do
   fi
 
   if [[ $1 == '-e' ]]; then
-    output="yes"
+    opt_eval="yes"
     shift
     continue
   fi
@@ -46,7 +46,7 @@ while [[ $1 ]]; do
 # funl hook file for '$1' command
 SH
 
-  if [[ $output == 'yes' ]]; then
+  if [[ $opt_eval == 'yes' ]]; then
     echo -e "$(funl rehash --def $1)"
   fi
 
