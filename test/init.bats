@@ -23,30 +23,11 @@ load test_helper
   run funl hook bla-bla
 
   run funl init
+  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "$(cat <<OUT
-bla-bla() {
-  funl proc bla-bla "\$@"
-}
-foo() {
-  funl proc foo "\$@"
-}
-OUT
-  )" ]
-}
-
-@test "prevents banned commands" {
-  mkdir -p "$FUNL_HOOKS"
-  run funl hook funl
-  run funl hook nyan
-  run funl hook command
-
-  run funl init
-  [ "$status" -eq 0 ]
-  [ "$output" == "$(cat <<OUT
-nyan() {
-  funl proc nyan "\$@"
-}
+bla-bla() { funl proc bla-bla "\$@" ; }
+foo() { funl proc foo "\$@" ; }
 OUT
   )" ]
 }

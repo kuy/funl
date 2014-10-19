@@ -2,7 +2,9 @@
 
 set -e
 
-content=$(cat <<HELP
+FUNL_BANNED=(funl command)
+
+DESC=$(cat <<TEXT
 Usage: funl hook [-e] <name>...
 
 Registers hooks of the given executable, such as builtin command,
@@ -10,12 +12,21 @@ program, and shell script.
 
 '-e' option can be used to reflect this to the current shell.
 e.g. $ eval "\$(funl hook -e git)"
-HELP
+TEXT
 )
+
+is_banned() {
+  for ban in ${FUNL_BANNED[@]}; do
+    if [[ $ban == $1 ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
 
 shift
 if [[ 0 -eq $# ]]; then
-  echo -e "$content" >&2
+  echo -e "$DESC" >&2
   exit 1
 fi
 
@@ -26,12 +37,17 @@ fi
 opt_eval=""
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-    echo -e "$content"
+    echo -e "$DESC"
     exit 0
   fi
 
   if [[ $1 == '-e' ]]; then
     opt_eval="yes"
+    shift
+    continue
+  fi
+
+  if is_banned $1; then
     shift
     continue
   fi
@@ -47,7 +63,7 @@ while [[ $1 ]]; do
 SH
 
   if [[ $opt_eval == 'yes' ]]; then
-    echo -e "$(funl rehash --def $1)"
+    echo -e "$(funl feed def $1)"
   fi
 
   shift

@@ -8,7 +8,7 @@ if [[ ! -d $FUNL_HOOKS ]]; then
   command mkdir -p "$FUNL_HOOKS"
 fi
 
-funcs="$(funl rehash)"
+funcs="$(funl feed def)"
 if [[ ! -z $funcs ]]; then
   echo -e "$funcs"
 fi

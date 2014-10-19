@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+
+# NOTE: work around for difference between BASH and ZSH about array
+if [[ $ZSH_NAME == "zsh" ]]; then
+  setopt localoptions ksharrays
+fi
+
+enum_hooks() {
+  local ORIG=$IFS
+  IFS=', '
+  for name in $(command ls -m "$FUNL_HOOKS"); do
+    echo "$name"
+  done
+  IFS=$ORIG
+}
+
+def_func() {
+  echo "$1() { funl proc $1 \"\$@\" ; }"
+}
+
+undef_func() {
+  echo "unset -f \"$1\" >/dev/null 2>&1 || true"
+}
+
+shift
+if [[ 0 -eq $# ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-feed: no arguments" >&2
+  exit 1
+fi
+
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
+fi
+
+cmd="$1"
+case "$cmd" in
+def | undef )
+  if [[ -z $2 ]]; then
+    names=$(enum_hooks)
+  else
+    shift
+    names="$@"
+  fi
+
+  for name in $names; do
+    echo -e "$(eval \"${cmd}_func\" \"$name\")"
+  done
+  ;;
+* )
+  [[ -n $FUNL_DEBUG ]] && echo "funl-feed: invalid subcommand: $1" >&2
+  exit 1
+  ;;
+esac

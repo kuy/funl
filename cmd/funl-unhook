@@ -37,14 +37,15 @@ while [[ $1 ]]; do
 
   hook_path="$FUNL_HOOKS/$1"
   if [[ ! -e $hook_path ]]; then
-    echo "funl: '$1' isn't registered as hook" >&2
-    exit 1
+    [[ -n $FUNL_DEBUG ]] && echo "funl: '$1' isn't registered as hook" >&2
+    shift
+    continue
   fi
 
   rm -f "$hook_path"
 
   if [[ $opt_eval == 'yes' ]]; then
-    echo -e "$(funl rehash --undef $1)"
+    echo -e "$(funl feed undef $1)"
   fi
 
   shift

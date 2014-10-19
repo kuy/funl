@@ -15,43 +15,40 @@ Usage: funl hook [-e] <name>...
 Registers hooks of the given executable, such as builtin command,
 program, and shell script.
 
-'-e' option is useful to enable hooked command right now.
+'-e' option can be used to reflect this to the current shell.
 e.g. $ eval "\$(funl hook -e git)"
 USAGE
   )" ]
 }
 
-@test "registers a hook well" {
-  mkdir -p "$FUNL_STUB_BIN"
-  stub_command 'nyan'
-  stub_peco 2
-
-  mkdir -p "$HOME"
-  cat <<RC > "$HOME/.funlrc"
-placeholder.src: echo -e "apple\nbanana\ncherry"
-RC
-
-  run nyan {placeholder} bla
-  [ "$status" -eq 0 ]
-  [ "$output" == "nyan: {placeholder} bla" ]
-
-  run funl hook nyan
+@test "registers a hook" {
+  run funl hook hoge
   [ "$status" -eq 0 ]
   [ -z "$output" ]
-  [ -e "${FUNL_HOOKS}/nyan" ]
-
-  eval_funl_init
-
-  run nyan {placeholder} bla
-  echo "$status: $output"
-  [ "$status" -eq 0 ]
-  [ "$output" == "nyan: banana bla" ]
+  [ -e "${FUNL_HOOKS}/hoge" ]
 }
 
-@test "already registered" {
+@test "registers multiple hooks at once" {
+  run funl hook apple banana cherry
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+  [ -e "${FUNL_HOOKS}/apple" ]
+  [ -e "${FUNL_HOOKS}/banana" ]
+  [ -e "${FUNL_HOOKS}/cherry" ]
+}
+
+@test "ignores banned names" {
+  run funl hook funl nyan command
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+  [ ! -e "${FUNL_HOOKS}/funl" ]
+  [ -e "${FUNL_HOOKS}/nyan" ]
+  [ ! -e "${FUNL_HOOKS}/command" ]
+}
+
+@test "already registered raises error" {
+  funl hook foo
   run funl hook foo
-  run funl hook foo
-  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ "$output" == "funl: 'foo' is already hooked" ]
   [ -e "${FUNL_HOOKS}/foo" ]
