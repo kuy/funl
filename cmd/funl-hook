@@ -9,9 +9,6 @@ Usage: funl hook [-e] <name>...
 
 Registers hooks of the given executable, such as builtin command,
 program, and shell script.
-
-'-e' option can be used to reflect this to the current shell.
-e.g. $ eval "\$(funl hook -e git)"
 TEXT
 )
 
@@ -24,17 +21,12 @@ is_banned() {
   return 1
 }
 
-shift
-if [[ 0 -eq $# ]]; then
-  echo -e "$DESC" >&2
-  exit 1
-fi
-
 if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-opt_eval=""
+names=()
+opt_eval=0
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
     echo -e "$DESC"
@@ -42,29 +34,41 @@ while [[ $1 ]]; do
   fi
 
   if [[ $1 == '-e' ]]; then
-    opt_eval="yes"
+    opt_eval=1
     shift
     continue
   fi
 
   if is_banned $1; then
+    [[ -n $FUNL_DEBUG ]] && echo "funl-hook: '$1' is banned" >&2
     shift
     continue
   fi
 
   hook_path="$FUNL_HOOKS/$1"
   if [[ -e $hook_path ]]; then
-    echo "funl: '$1' is already hooked" >&2
-    exit 1
+    [[ -n $FUNL_DEBUG ]] && echo "funl-hook: '$1' is already hooked" >&2
+    shift
+    continue
   fi
 
-  cat <<SH > "$hook_path"
-# funl hook file for '$1' command
-SH
-
-  if [[ $opt_eval == 'yes' ]]; then
-    echo -e "$(funl feed def $1)"
-  fi
+  names+=( "$1" )
 
   shift
+done
+
+if [[ 0 -eq ${#names[@]} ]]; then
+  echo -e "$DESC" >&2
+  exit 1
+fi
+
+for name in ${names[@]}; do
+  hook_path="$FUNL_HOOKS/$name"
+  cat <<SH > "$hook_path"
+# funl hook file for '$name' command
+SH
+
+  if [[ $opt_eval -eq 1 ]]; then
+    echo -e "$(funl feed def $name)"
+  fi
 done

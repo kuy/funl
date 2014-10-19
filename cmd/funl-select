@@ -1,18 +1,20 @@
 #!/usr/bin/env bash
 
-shift
 if [[ 1 -ne $# ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-select: no arguments" >&2
   exit 1
 fi
 
 src=$(funl config "$1" "src")
 if [[ 0 -ne $? ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-select: failed in funl-config: $1: $src" >&2
   exit 1
 fi
 
 # TODO: Support both peco and percol (self-modifying for speed?)
 selected=$(eval "$src | peco" 2>&1)
 if [[ 0 -ne $? ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-select: failed in 'src' or peco" >&2
   exit 1
 fi
 

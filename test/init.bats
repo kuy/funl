@@ -2,10 +2,10 @@
 
 load test_helper
 
-@test "no hooks print nothing" {
+@test "no hooks print only 'funl' function" {
   run funl init
   [ "$status" -eq 0 ]
-  [ -z "$output" ]
+  [ ! -z $(echo "$output" | grep "#!/usr/bin/env bash") ]
 }
 
 @test "creates 'hooks' directory if not exist" {
@@ -13,7 +13,7 @@ load test_helper
 
   run funl init
   [ "$status" -eq 0 ]
-  [ -z "$output" ]
+  [ ! -z "$output" ]
   [ -d "$FUNL_HOOKS" ]
 }
 
@@ -23,11 +23,8 @@ load test_helper
   run funl hook bla-bla
 
   run funl init
-  echo "$status: $output"
   [ "$status" -eq 0 ]
-  [ "$output" == "$(cat <<OUT
-bla-bla() { funl proc bla-bla "\$@" ; }
-foo() { funl proc foo "\$@" ; }
-OUT
-  )" ]
+  [ ! -z $(echo "$output" | grep "#!/usr/bin/env bash") ]
+  [ ! -z "$(echo "$output" | grep "bla-bla()")" ]
+  [ ! -z "$(echo "$output" | grep "foo()")" ]
 }

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-content=$(cat <<HELP
+DESC=$(cat <<HELP
 Usage: funl list [-1]
 
 Lists all registered hook names.
@@ -8,9 +8,8 @@ If '-1' option is specified, funl lists one name per one line.
 HELP
 )
 
-shift
 if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-  echo -e "$content"
+  echo -e "$DESC"
   exit 0
 fi
 
@@ -19,7 +18,6 @@ if [[ -z $FUNL_HOOKS ]]; then
 fi
 
 hooks=$(command ls -m "$FUNL_HOOKS" | grep -v funl)
-
 if [[ -z $hooks ]]; then
   echo "funl: no hooks registered"
 else

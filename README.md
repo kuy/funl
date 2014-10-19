@@ -12,7 +12,7 @@ WIP
 
 1. Check out funl into your home directory.
 
-    $ git clone git@github.com:kuy/funl.git .funl
+    $ git clone git@github.com:kuy/funl.git $HOME/.funl
 
 2. Add following setting to your `.bashrc` or `.zshrc` file.
 
@@ -50,15 +50,17 @@ peco will be launched, and then you get selected color.
 ## Sample `.funlrc` file
 
 branch.src: git for-each-ref --sort=-committerdate refs/heads/ | cut -f2 | sed 's:refs/heads/::g'
-branch.post: sed -e 's:^\(.*\)$:hoge-\1:g'
+branch.post: sed -e 's:^\(.*\)$:\1:g'
 
 ps.src: ps aux
 ps.post: awk '{ print $2 }'
 
+color.src: echo -e "red\\ngreen\\nblue"
+
 
 ## History
 
-- 0.1.0-dev (2014-10-16)
+- 0.0.0 (2014-10-16)
 
 
 ## Licence

@@ -8,6 +8,35 @@ if [[ ! -d $FUNL_HOOKS ]]; then
   command mkdir -p "$FUNL_HOOKS"
 fi
 
+# NOTE: Separate declaration and assignment of 'output' variable
+#       to avoid problem that '\$?' always return 0 even if exit code is 1.
+
+cat <<SH
+#!/usr/bin/env bash
+
+funl() {
+  local funl_path="$FUNL_ROOT/bin/funl"
+  case "\$1" in
+    hook | unhook )
+      local cmd="\$1"
+      shift
+      local output
+      output="\$(\$funl_path \$cmd -e "\$@" 2>&1)"
+      local code="\$?"
+      if [[ 0 -eq \$code ]]; then
+        eval "\$output"
+      else
+        echo -e "\$output" >&2
+      fi
+      return \$code
+      ;;
+    * )
+      \$funl_path "\$@"
+      ;;
+  esac
+}
+SH
+
 funcs="$(funl feed def)"
 if [[ ! -z $funcs ]]; then
   echo -e "$funcs"

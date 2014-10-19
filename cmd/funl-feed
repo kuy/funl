@@ -22,7 +22,6 @@ undef_func() {
   echo "unset -f \"$1\" >/dev/null 2>&1 || true"
 }
 
-shift
 if [[ 0 -eq $# ]]; then
   [[ -n $FUNL_DEBUG ]] && echo "funl-feed: no arguments" >&2
   exit 1
@@ -34,20 +33,20 @@ fi
 
 cmd="$1"
 case "$cmd" in
-def | undef )
-  if [[ -z $2 ]]; then
-    names=$(enum_hooks)
-  else
-    shift
-    names="$@"
-  fi
+  def | undef )
+    if [[ -z $2 ]]; then
+      names=$(enum_hooks)
+    else
+      shift
+      names="$@"
+    fi
 
-  for name in $names; do
-    echo -e "$(eval \"${cmd}_func\" \"$name\")"
-  done
-  ;;
-* )
-  [[ -n $FUNL_DEBUG ]] && echo "funl-feed: invalid subcommand: $1" >&2
-  exit 1
-  ;;
+    for name in $names; do
+      echo -e "$(eval \"${cmd}_func\" \"$name\")"
+    done
+    ;;
+  * )
+    [[ -n $FUNL_DEBUG ]] && echo "funl-feed: invalid subcommand: $1" >&2
+    exit 1
+    ;;
 esac

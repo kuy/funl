@@ -2,35 +2,32 @@
 
 set -e
 
-content=$(cat <<HELP
+DESC=$(cat <<TEXT
 Usage: funl unhook [-e] <name>...
 
 Unregisters hooks of the given names.
-
-'-e' option can be used to reflect this to the current shell.
-e.g. $ eval "\$(funl unhook -e git)"
-HELP
+TEXT
 )
-
-shift
-if [[ 0 -eq $# ]]; then
-  echo -e "$content" >&2
-  exit 1
-fi
 
 if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-opt_eval=""
+if [[ 0 -eq $# ]]; then
+  echo -e "$DESC" >&2
+  exit 1
+fi
+
+names=()
+opt_eval=0
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-    echo -e "$content"
+    echo -e "$DESC"
     exit 0
   fi
 
   if [[ $1 == '-e' ]]; then
-    opt_eval="yes"
+    opt_eval=1
     shift
     continue
   fi
@@ -42,11 +39,21 @@ while [[ $1 ]]; do
     continue
   fi
 
-  rm -f "$hook_path"
-
-  if [[ $opt_eval == 'yes' ]]; then
-    echo -e "$(funl feed undef $1)"
-  fi
+  names+=( "$1" )
 
   shift
+done
+
+if [[ 0 -eq ${#names[@]} ]]; then
+  echo -e "$DESC" >&2
+  exit 1
+fi
+
+for name in ${names[@]}; do
+  hook_path="$FUNL_HOOKS/$name"
+  rm -f "$hook_path"
+
+  if [[ $opt_eval -eq 1 ]]; then
+    echo -e "$(funl feed undef $name)"
+  fi
 done

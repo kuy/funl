@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 
-shift
 if [[ 0 -eq $# ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-proc: no arguments" >&2
   exit 1
 fi
 
-i=0
-params=
+params=()
 for param in "$@"; do
   name=$(echo "$param" | sed -e 's/^[^{]*{\([^}][^}]*\)}[^}]*$/\1/')
 
   if [[ $name == $param ]]; then
-    params[$i]="$param"
+    params+=( "$param" )
   else
     choice=$(funl select "$name")
     if [[ 0 -ne $? ]]; then
@@ -25,10 +24,8 @@ for param in "$@"; do
     fi
 
     script="s;{$name};$choice;g"
-    params[$i]=$(echo "$param" | sed "$script")
+    params+=( "$(echo "$param" | sed "$script")" )
   fi
-
-  (( i ++ ))
 done
 
 set -- "${params[@]}"

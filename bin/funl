@@ -32,4 +32,5 @@ if [[ ! -x $cmd_path ]]; then
   exit 1
 fi
 
+shift
 exec "$cmd_path" "$@"

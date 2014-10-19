@@ -3,15 +3,13 @@ TODO
 
 ## Memo
 
-- .bashrcに定義した関数内で関数定義の文字列をevalするとその場で反映されることがわかった
-  - フック用のfunl関数をfunl initで仕込んで、funl hook/unhookのときだけevalしてその場で反映させる
-
-- 別のシェルで新しくフックが追加されても反映されないため、`funl refresh`で更新する
-- zshとかのフックで自動的にrefreshできないか調べる
+- `funl feed`で関数を再定義できるようにする
+- zshとかのフックで自動的にfeedできないか調べる
 
 ## Must
 
-- Ignore placeholer if it's not defined
+- Validate command name with Regex pattern
+- Ignore placeholer if not defined
 - Show error message if peco is not installed
   - Put guide to install peco in README.md
 - Implement alias for placeholders
@@ -37,7 +35,7 @@ TODO
     - in `kill` command, {ps} will insert process ID
     - in `pkill` command, {ps} will insert process name
 - Plugin mechanism for 'src' and 'post'
-  - Install plugins using `funl`
+  - Install and select plugins using `funl`
 - [hook] Raise warning if given command does not exist
 - [hook] Add '-f' option to ignore warning
 - Compare execution time of `funl git` and normal `git`

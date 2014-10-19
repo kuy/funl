@@ -2,7 +2,7 @@
 
 set -e
 
-content=$(cat <<HELP
+DESC=$(cat <<HELP
 Usage: funl <command> [...]
 
 Here are available commands:
@@ -17,13 +17,12 @@ Use 'funl help <command>' for more information of specific command.
 HELP
 )
 
-shift
 if [[ ! -z $1 ]]; then
-  content=$(funl $1 -h)
+  DESC=$(funl $1 -h)
   if [[ 0 -ne $? ]]; then
-    echo "$content" >&2
+    echo "$DESC" >&2
     exit 1
   fi
 fi
 
-echo -e "$content"
+echo -e "$DESC"

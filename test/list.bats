@@ -20,7 +20,9 @@ setup() {
   [ "$output" == "bar, foo" ]
 }
 
-# @test "with '-1' option prints one command per one line" {
-#   run funl list -1
-#   [ "$status" -eq 0 ]
-# }
+@test "with '-1' option prints one command per one line" {
+  skip
+
+  run funl list -1
+  [ "$status" -eq 0 ]
+}

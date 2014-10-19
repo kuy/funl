@@ -8,15 +8,13 @@ setup() {
 
 @test "no arguments prints usage" {
   run funl hook
+  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ "$output" == "$(cat <<USAGE
 Usage: funl hook [-e] <name>...
 
 Registers hooks of the given executable, such as builtin command,
 program, and shell script.
-
-'-e' option can be used to reflect this to the current shell.
-e.g. $ eval "\$(funl hook -e git)"
 USAGE
   )" ]
 }
@@ -38,18 +36,24 @@ USAGE
 }
 
 @test "ignores banned names" {
+  skip
+
   run funl hook funl nyan command
   [ "$status" -eq 0 ]
-  [ -z "$output" ]
+  [ "$output" == "funl: banned names: funl, command" ]
   [ ! -e "${FUNL_HOOKS}/funl" ]
   [ -e "${FUNL_HOOKS}/nyan" ]
   [ ! -e "${FUNL_HOOKS}/command" ]
 }
 
-@test "already registered raises error" {
+@test "ignores existing names" {
+  skip
+
   funl hook foo
+  [ -e "${FUNL_HOOKS}/foo" ]
+
   run funl hook foo
-  [ "$status" -ne 0 ]
-  [ "$output" == "funl: 'foo' is already hooked" ]
+  [ "$status" -eq 0 ]
+  [ "$output" == "funl: registered names: foo" ]
   [ -e "${FUNL_HOOKS}/foo" ]
 }

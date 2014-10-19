@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-shift
 if [[ 2 -ne $# ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-config: accepts 2 params, but $#" >&2
   exit 1
 fi
 

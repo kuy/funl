@@ -44,6 +44,7 @@ RC
   stub_peco 1
 
   run funl proc "slct" "{animal}" "is animal"
+  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "slct: _cat_ is animal" ]
 }
@@ -54,6 +55,7 @@ RC
   stub_peco 2
 
   run funl proc "slct" "{animal}" "and" "{weather}"
+  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "slct: _dog_ and rainy" ]
 }
@@ -64,7 +66,6 @@ RC
   stub_peco 3
 
   run funl proc "slct" "{weather}" "and" "{movie}"
-  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ "$output" == "funl: 'src' definition is required (missing 'movie.src')" ]
 }
@@ -75,7 +76,6 @@ RC
   stub_peco 1
 
   run funl proc "slct" "{color}"
-  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ "$output" == "funl: error occured in post-process 'color.post'" ]
 }

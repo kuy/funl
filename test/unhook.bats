@@ -9,14 +9,11 @@ setup() {
 @test "no arguments prints usage" {
   run funl unhook
   [ "$status" -ne 0 ]
-  [ "$output" == "$(cat <<BLK
+  [ "$output" == "$(cat <<USAGE
 Usage: funl unhook [-e] <name>...
 
 Unregisters hooks of the given names.
-
-'-e' option can be used to reflect this to the current shell.
-e.g. $ eval "\$(funl unhook -e git)"
-BLK
+USAGE
   )" ]
 }
 
@@ -45,6 +42,8 @@ BLK
 }
 
 @test "ignores unregistered hooks" {
+  skip
+
   funl hook foo bar
   [ -e "${FUNL_HOOKS}/foo" ]
   [ -e "${FUNL_HOOKS}/bar" ]
