@@ -8,6 +8,8 @@ TODO
 
 ## Must
 
+- gitリポジトリ以外で`funl version`するとエラー
+- `funl hook -h hoge`を実行するとエラー
 - Validate command name with Regex pattern
 - Ignore placeholer if not defined
 - Show error message if peco is not installed

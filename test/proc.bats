@@ -36,6 +36,10 @@ RC
   run funl proc "slct" "monkey" "and" "snowy"
   [ "$status" -eq 0 ]
   [ "$output" == "slct: monkey and snowy" ]
+
+  run funl proc "slct" "-m" '"monkey [snowy]"'
+  [ "$status" -eq 0 ]
+  [ "$output" == 'slct: -m "monkey [snowy]"' ]
 }
 
 @test "processes 1 placeholder" {

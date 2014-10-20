@@ -7,9 +7,8 @@ fi
 
 params=()
 for param in "$@"; do
-  name=$(echo "$param" | sed -e 's/^[^{]*{\([^}][^}]*\)}[^}]*$/\1/')
-
-  if [[ $name == $param ]]; then
+  name=$(echo "$param" | grep -o '{\w\+}' | sed -e 's/[{}]//g')
+  if [[ -z $name ]]; then
     params+=( "$param" )
   else
     choice=$(funl select "$name")
