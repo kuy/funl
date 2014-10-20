@@ -8,15 +8,22 @@ load test_helper
   [ -z "$output" ]
 }
 
-@test "unregistered command prints error" {
+@test "unregistered command raises error" {
   run funl exec nyan
   [ "$status" -ne 0 ]
   [ "$output" == "funl: command not found: nyan" ]
 }
 
 @test "executes original command" {
-  run funl hook grep
-  run funl exec grep -h
-  [ "$status" -eq 2 ]
-  [ $(expr "$output" : "usage: grep.*") -ne 0 ]
+  mkdir -p "$FUNL_STUB_BIN"
+  stub_command 'nyan'
+  eval "nyan() { echo 'nyan: shell function' ; }"
+
+  run nyan "{hoge}"
+  [ "$status" -eq 0 ]
+  [ "$output" == "nyan: shell function" ]
+
+  run funl exec nyan "{hoge}"
+  [ "$status" -eq 0 ]
+  [ "$output" == "nyan: {hoge}" ]
 }

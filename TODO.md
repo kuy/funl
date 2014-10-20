@@ -3,23 +3,22 @@ TODO
 
 ## Memo
 
-- `funl feed`で関数を再定義できるようにする
+- `funl feed`で定義済みのシェル関数をクリアしてから再定義できるようにする
 - zshとかのフックで自動的にfeedできないか調べる
 
 ## Must
 
-- `funl hook -h hoge`を実行するとエラー
-- Validate command name with Regex pattern
-- Ignore placeholer if not defined
-- Show error message if peco is not installed
+- [fook] `funl hook -h hoge` raises error
+- [proc] Validate command name with Regex pattern
+- [select] Show error message if peco is not installed
   - Put guide to install peco in README.md
-- Implement alias for placeholders
+- [config] Implement alias for placeholders
   - b: &branch
-- Running tests using Travis CI on other platforms
 - [list] Sort by name for consistent output
 - [list] Add '-1' option
   - Prints one name per one line
 - [unhook] Add '--all' option to unregister all hooks
+- [proc] Ignore placeholer if not defined
 - [proc] Fill multiple placeholders with same values at once
   - `git branch {branch} origin/{branch}`
 - [select] Support both peco and percol

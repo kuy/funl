@@ -14,12 +14,8 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
-if [[ -z $FUNL_HOOKS ]]; then
-  FUNL_HOOKS="$FUNL_ROOT/hooks"
-fi
-
 bin_dir="$FUNL_ROOT/bin"
-new_path=$(path_remove "$bin_dir" "$FUNL_HOOKS")
+new_path=$(path_remove "$bin_dir")
 
 $(PATH=$new_path type $1 >/dev/null 2>&1)
 if [[ 0 -ne $? ]]; then

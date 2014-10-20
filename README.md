@@ -1,4 +1,4 @@
-funl
+funl [![Build Status](https://travis-ci.org/kuy/funl.svg?branch=master)](https://travis-ci.org/kuy/funl)
 ====
 
 Puts placeholders in command-line, then enables in-place selecting with using peco/percol.
@@ -12,12 +12,16 @@ WIP
 
 1. Check out funl into your home directory.
 
-    $ git clone git@github.com:kuy/funl.git $HOME/.funl
+```sh
+$ git clone git@github.com:kuy/funl.git $HOME/.funl
+```
 
 2. Add following setting to your `.bashrc` or `.zshrc` file.
 
-    export PATH="$HOME/.funl/bin:$PATH"
-    eval "$(funl init)"
+```sh
+export PATH="$HOME/.funl/bin:$PATH"
+eval "$(funl init)"
+```
 
 3. Put `.funlrc` file in home directory
 
@@ -26,29 +30,38 @@ WIP
 
 ### Register a command/program name which you want to hook
 
-    $ funl hook echo
+```sh
+$ funl hook echo
+```
 
 ### Define placeholders in `.funlrc` file
 
 For example, following command defines 'color' placeholder.
 
-    $ echo "color.src: echo -e \"red\\\\ngreen\\\\nblue\"" >> ~/.funlrc
+```sh
+$ echo "color.src: echo -e \"red\\\\ngreen\\\\nblue\"" >> ~/.funlrc
+```
 
 ### Reload or restart shell environment
 
-    $ source ~/.zshrc
+```sh
+$ source ~/.zshrc
+```
 
 ### Use placeholder in command-line
 
 Try this command
 
-    $ echo {color}
+```sh
+$ echo {color}
+```
 
 peco will be launched, and then you get selected color.
 
 
 ## Sample `.funlrc` file
 
+```
 branch.src: git for-each-ref --sort=-committerdate refs/heads/ | cut -f2 | sed 's:refs/heads/::g'
 branch.post: sed -e 's:^\(.*\)$:\1:g'
 
@@ -56,6 +69,7 @@ ps.src: ps aux
 ps.post: awk '{ print $2 }'
 
 color.src: echo -e "red\\ngreen\\nblue"
+```
 
 
 ## History
