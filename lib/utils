@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+if [[ -z $FUNL_HOOKS ]]; then
+  FUNL_HOOKS="$FUNL_ROOT/hooks"
+fi
+
+hook_path() {
+  echo "$FUNL_HOOKS/$1"
+}
+
+is_hooked() {
+  test -e "$FUNL_HOOKS/$1"
+}
+
+BANNED=(funl command)
+
+is_banned() {
+  for ban in ${BANNED[@]}; do
+    if [[ $ban == $1 ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
+BUFFER=""
+
+echo_to_pipe() {
+  BUFFER="$BUFFER$1\n"
+}
+
+exit_with() {
+  if [[ ! -z $opt_pipe ]]; then
+    echo -e "$BUFFER" >"$opt_pipe/output"
+    echo "$1" >"$opt_pipe/code"
+  fi
+  exit $1
+}

@@ -1,40 +1,27 @@
 #!/usr/bin/env bash
 
-set -e
-
-FUNL_BANNED=(funl command)
-
 DESC=$(cat <<TEXT
-Usage: funl hook [-e] <name>...
+Usage: funl hook <name>...
 
 Registers hooks of the given executable, such as builtin command,
 program, and shell script.
 TEXT
 )
 
-is_banned() {
-  for ban in ${FUNL_BANNED[@]}; do
-    if [[ $ban == $1 ]]; then
-      return 0
-    fi
-  done
-  return 1
-}
+set -e
 
-if [[ -z $FUNL_HOOKS ]]; then
-  FUNL_HOOKS="$FUNL_ROOT/hooks"
-fi
+. "$FUNL_ROOT/lib/utils"
 
 names=()
-opt_eval=0
+opt_pipe=""
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
     echo -e "$DESC"
-    exit 0
+    exit_with 0
   fi
 
-  if [[ $1 == '-e' ]]; then
-    opt_eval=1
+  if [[ $1 =~ "--pipe=" ]]; then
+    opt_pipe="$(echo $1 | sed 's:--pipe=::')"
     shift
     continue
   fi
@@ -45,8 +32,7 @@ while [[ $1 ]]; do
     continue
   fi
 
-  hook_path="$FUNL_HOOKS/$1"
-  if [[ -e $hook_path ]]; then
+  if is_hooked $1; then
     [[ -n $FUNL_DEBUG ]] && echo "funl-hook: '$1' is already hooked" >&2
     shift
     continue
@@ -59,16 +45,15 @@ done
 
 if [[ 0 -eq ${#names[@]} ]]; then
   echo -e "$DESC" >&2
-  exit 1
+  exit_with 1
 fi
 
 for name in ${names[@]}; do
-  hook_path="$FUNL_HOOKS/$name"
-  cat <<SH > "$hook_path"
+  cat <<SH > "$FUNL_HOOKS/$name"
 # funl hook file for '$name' command
 SH
 
-  if [[ $opt_eval -eq 1 ]]; then
-    echo -e "$(funl feed def $name)"
-  fi
+  echo_to_pipe "$(funl feed def $name)"
 done
+
+exit_with 0

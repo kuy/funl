@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+bases=()
+opt_delete=0
+while [[ $1 ]]; do
+  case "$1" in
+    '-d' )
+      opt_delete=1
+      ;;
+    * )
+      bases+=( "$1" )
+      ;;
+  esac
+  shift
+done
+
+if [[ $opt_delete -eq 0 ]]; then
+  base="$(mktemp -d 2>/dev/null || mktemp -d -t funl)"
+
+  mkfifo "$base/output"
+  mkfifo "$base/code"
+
+  echo "$base"
+else
+  for base in ${bases[@]}; do
+    rm -f "$base/output"
+    rm -f "$base/code"
+    rmdir "$base"
+  done
+fi

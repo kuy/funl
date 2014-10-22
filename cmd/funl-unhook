@@ -1,40 +1,32 @@
 #!/usr/bin/env bash
 
-set -e
-
 DESC=$(cat <<TEXT
-Usage: funl unhook [-e] <name>...
+Usage: funl unhook <name>...
 
 Unregisters hooks of the given names.
 TEXT
 )
 
-if [[ -z $FUNL_HOOKS ]]; then
-  FUNL_HOOKS="$FUNL_ROOT/hooks"
-fi
+set -e
 
-if [[ 0 -eq $# ]]; then
-  echo -e "$DESC" >&2
-  exit 1
-fi
+. "$FUNL_ROOT/lib/utils"
 
 names=()
-opt_eval=0
+opt_pipe=""
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
     echo -e "$DESC"
-    exit 0
+    exit_with 0
   fi
 
-  if [[ $1 == '-e' ]]; then
-    opt_eval=1
+  if [[ $1 =~ "--pipe=" ]]; then
+    opt_pipe="$(echo $1 | sed 's:--pipe=::')"
     shift
     continue
   fi
 
-  hook_path="$FUNL_HOOKS/$1"
-  if [[ ! -e $hook_path ]]; then
-    [[ -n $FUNL_DEBUG ]] && echo "funl: '$1' isn't registered as hook" >&2
+  if ! is_hooked $1; then
+    [[ -n $FUNL_DEBUG ]] && echo "funl-unhook: '$1' isn't registered" >&2
     shift
     continue
   fi
@@ -46,14 +38,13 @@ done
 
 if [[ 0 -eq ${#names[@]} ]]; then
   echo -e "$DESC" >&2
-  exit 1
+  exit_with 1
 fi
 
 for name in ${names[@]}; do
-  hook_path="$FUNL_HOOKS/$name"
-  rm -f "$hook_path"
+  rm -f "$(hook_path $name)"
 
-  if [[ $opt_eval -eq 1 ]]; then
-    echo -e "$(funl feed undef $name)"
-  fi
+  echo_to_pipe "$(funl feed undef $name)"
 done
+
+exit_with 0

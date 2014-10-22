@@ -8,9 +8,8 @@ TODO
 
 ## Issues
 
-- [fook/unhook] `funl hook/unhook -h hoge` raises error
-  - Use named pipe to return function definitions to caller
-  - STDOUT should not be used for this purpose
+- [hook/unhook] Improve test case
+- [pipe] Write test
 - [select] Show error message if peco is not installed
   - Put guide to install peco in README.md
 

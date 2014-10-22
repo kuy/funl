@@ -8,10 +8,9 @@ setup() {
 
 @test "no arguments prints usage" {
   run funl hook
-  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ "$output" == "$(cat <<USAGE
-Usage: funl hook [-e] <name>...
+Usage: funl hook <name>...
 
 Registers hooks of the given executable, such as builtin command,
 program, and shell script.

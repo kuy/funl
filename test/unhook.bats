@@ -10,7 +10,7 @@ setup() {
   run funl unhook
   [ "$status" -ne 0 ]
   [ "$output" == "$(cat <<USAGE
-Usage: funl unhook [-e] <name>...
+Usage: funl unhook <name>...
 
 Unregisters hooks of the given names.
 USAGE
