@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
-if [[ 2 -ne $# ]]; then
-  [[ -n $FUNL_DEBUG ]] && echo "funl-config: accepts 2 params, but $#" >&2
+DESC=$(cat <<TEXT
+Usage: funl config
+
+Show available placeholders.
+TEXT
+)
+
+if [[ 1 -eq $# ]] || [[ 3 -le $# ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-config: wrong arguments" >&2
   exit 1
 fi
 
@@ -14,16 +21,29 @@ if [[ ! -e $FUNL_CONFIG ]]; then
   exit 1
 fi
 
+if [[ 0 -eq $# ]]; then
+  echo $(cat "$FUNL_CONFIG" | grep -o '[ ]*.*.src[ ]*:' | sed -e 's/.src[ ]*://' | sed -e 's/[ ]//g')
+  exit 0
+fi
+
 line=$(cat "$FUNL_CONFIG" | grep -E "^$1\\.$2 *:" | head -n 1)
 if [[ -z $line ]]; then
-  if [[ $2 == "src" ]]; then
-    # 'src' definition is required
-    echo "funl: 'src' definition is required (missing '$1.$2')" >&2
-    exit 1
-  else
-    # other ('post', ...) definitions are optional
-    exit 0
-  fi
+  case "$2" in
+    # required
+    src )
+      echo "funl: 'src' definition is required (missing '$1.$2')" >&2
+      exit 1
+      ;;
+    # optional
+    post )
+      exit 0
+      ;;
+    # invalid type
+    * )
+      echo "funl: invalid type: '$2'" >&2
+      exit 1
+      ;;
+  esac
 fi
 
 line=$(echo "$line" | sed -e "s/$1.$2 *: *//")

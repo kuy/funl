@@ -12,15 +12,35 @@ setup() {
   [ "$output" == "funl: config not found" ]
 }
 
-@test "no arguments or 1 argument raise error" {
-  touch "$HOME/.funlrc"
-  run funl config
-  [ "$status" -ne 0 ]
-  [ -z "$output" ]
+@test "no arguments print defined placeholders" {
+  cat <<CONF > "$HOME/.funlrc"
+apple.src: bla bla bla
+banana.src: foo bar 2000
+banana.post: foo bar 2000
+cherry.src :aaa bbb ccc
+CONF
 
+  run funl config
+  [ "$status" -eq 0 ]
+  [ "$output" == "apple banana cherry" ]
+}
+
+@test "wrong arguments raise error" {
+  touch "$HOME/.funlrc"
   run funl config "ticket"
   [ "$status" -ne 0 ]
   [ -z "$output" ]
+
+  run funl config "ticket" "src" "post"
+  [ "$status" -ne 0 ]
+  [ -z "$output" ]
+}
+
+@test "invalid type parameter raises error" {
+  touch "$HOME/.funlrc"
+  run funl config "ticket" "hoge"
+  [ "$status" -ne 0 ]
+  [ "$output" == "funl: invalid type: 'hoge'" ]
 }
 
 @test "source definition is required" {

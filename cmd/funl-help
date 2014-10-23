@@ -1,26 +1,25 @@
 #!/usr/bin/env bash
 
-set -e
-
-DESC=$(cat <<HELP
+DESC=$(cat <<TEXT
 Usage: funl <command> [...]
 
 Here are available commands:
 
-     list: List all registered hook names
+   config: Show available placeholders
+     help: Show this usage
      hook: Register a hook of the given executable
+     list: List all registered hooks
    unhook: Unregister a hook
   version: Show version information
-     help: Displays help contents
 
 Use 'funl help <command>' for more information of specific command.
-HELP
+TEXT
 )
 
 if [[ ! -z $1 ]]; then
   DESC=$(funl $1 -h)
   if [[ 0 -ne $? ]]; then
-    echo "$DESC" >&2
+    echo -e "$DESC" >&2
     exit 1
   fi
 fi

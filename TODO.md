@@ -32,6 +32,8 @@ TODO
 
 ## Idea/Wish
 
+- Project specific configuration
+  - Nearest .funlrc file is used, and fallback to global config
 - [funl] Add `funl upgrade` command for self updating
   - Prepare '--edge' option to grab latest version
 - [select] Support both peco and percol

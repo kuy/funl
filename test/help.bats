@@ -10,11 +10,12 @@ Usage: funl <command> [...]
 
 Here are available commands:
 
-     list: List all registered hook names
+   config: Show available placeholders
+     help: Show this usage
      hook: Register a hook of the given executable
+     list: List all registered hooks
    unhook: Unregister a hook
   version: Show version information
-     help: Displays help contents
 
 Use 'funl help <command>' for more information of specific command.
 USAGE
