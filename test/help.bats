@@ -5,7 +5,7 @@ load test_helper
 @test "no arguments prints usage overview" {
   run funl help
   [ "$status" -eq 0 ]
-  [ "$output" == "$(cat <<BLK
+  [ "$output" == "$(cat <<USAGE
 Usage: funl <command> [...]
 
 Here are available commands:
@@ -17,7 +17,7 @@ Here are available commands:
      help: Displays help contents
 
 Use 'funl help <command>' for more information of specific command.
-BLK
+USAGE
   )" ]
 }
 
@@ -40,11 +40,12 @@ BLK
 @test "prints help content of specific command" {
   run funl help list
   [ "$status" -eq 0 ]
-  [ "$output" == "$(cat <<BLK
+  [ "$output" == "$(cat <<USAGE
 Usage: funl list [-1]
 
 Lists all registered hook names.
+In case of no registered hooks, this command prints nothing.
 If '-1' option is specified, funl lists one name per one line.
-BLK
+USAGE
   )" ]
 }

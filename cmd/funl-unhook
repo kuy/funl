@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
 DESC=$(cat <<TEXT
-Usage: funl unhook <name>...
+Usage: funl unhook [--all] <name>...
 
 Unregisters hooks of the given names.
+'--all' option deletes all registered hooks.
+If you specify '--all' option, all other parameters will be ignored.
 TEXT
 )
 
@@ -12,11 +14,17 @@ set -e
 . "$FUNL_ROOT/lib/utils"
 
 names=()
+opt_all=0
 opt_pipe=""
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
     echo -e "$DESC"
     exit_with 0
+  fi
+
+  if [[ $1 == '--all' ]]; then
+    opt_all=1
+    break
   fi
 
   if [[ $1 =~ "--pipe=" ]]; then
@@ -30,8 +38,19 @@ while [[ $1 ]]; do
   shift
 done
 
+if [[ $opt_all -eq 1 ]]; then
+  names=()
+  for name in $(funl list -1); do
+    names+=( "$name" )
+  done
+fi
+
 if [[ 0 -eq ${#names[@]} ]]; then
-  echo -e "$DESC" >&2
+  if [[ $opt_all -eq 1 ]]; then
+    echo "funl: no hooks registered" >&2
+  else
+    echo -e "$DESC" >&2
+  fi
   exit_with 1
 fi
 

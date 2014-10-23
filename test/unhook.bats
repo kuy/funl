@@ -7,9 +7,11 @@ setup() {
 }
 
 HELP_CONTENT="$(cat <<USAGE
-Usage: funl unhook <name>...
+Usage: funl unhook [--all] <name>...
 
 Unregisters hooks of the given names.
+'--all' option deletes all registered hooks.
+If you specify '--all' option, all other parameters will be ignored.
 USAGE
 )"
 
@@ -69,6 +71,24 @@ USAGE
   [ ! -e "${FUNL_HOOKS}/apple" ]
   [ ! -e "${FUNL_HOOKS}/banana" ]
   [ ! -e "${FUNL_HOOKS}/cherry" ]
+}
+
+@test "'--all' option unregisters all hooks" {
+  funl hook apple banana cherry
+
+  run funl unhook --all
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+  [ ! -e "${FUNL_HOOKS}/apple" ]
+  [ ! -e "${FUNL_HOOKS}/banana" ]
+  [ ! -e "${FUNL_HOOKS}/cherry" ]
+}
+
+@test "'--all' option is specified, but no registered hooks" {
+  run funl unhook --all
+  echo "$status: $output"
+  [ "$status" -ne 0 ]
+  [ "$output" == "funl: no hooks registered" ]
 }
 
 @test "ignores hooks not registered" {
