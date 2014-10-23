@@ -8,7 +8,6 @@ TODO
 
 ## Issues
 
-- [pipe] Write test
 - [select] Show error message if peco is not installed
   - Put guide to install peco in README.md
 - Actual test suit doesn't test 'funl' shell function
@@ -16,11 +15,12 @@ TODO
 
 ## Must
 
-- [hook/unhook] should these commands return 1 instead of 0 when error occurred
 - [config] Implement alias for placeholders
   - b: &branch
+- [hook/unhook] should these commands return 1 instead of 0 when error occurred
 - [unhook] Add '--all' option to unregister all hooks
-- [proc] Validate command name with Regexp pattern
+- [proc] Define pattern for valid command name
+  - Check on register hooks
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
 - [proc] Fill multiple placeholders with same value at once
