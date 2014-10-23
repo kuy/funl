@@ -15,7 +15,6 @@ TODO
 
 ## Must
 
-- [select] Add test case when 'src' returns nothing
 - [config] Implement alias for placeholders
   - b: &branch
 - [select] Support multiple selection
@@ -32,6 +31,9 @@ TODO
 
 ## Idea/Wish
 
+- [list/config] Same format for listing items
+  - Use space as common delimiter
+- [config] '-1' option to print one item per one line
 - Project specific configuration
   - Nearest .funlrc file is used, and fallback to global config
 - [funl] Add `funl upgrade` command for self updating

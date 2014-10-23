@@ -58,3 +58,14 @@ RC
   [ "$status" -ne 0 ]
   [ -z "$output" ]
 }
+
+@test "'src' generates nothing" {
+  cat <<RC > "$HOME/.funlrc"
+color.src: echo ""
+RC
+
+  run funl select color
+  echo "$status: $output"
+  [ "$status" -ne 0 ]
+  [ -z "$output" ]
+}
