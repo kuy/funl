@@ -25,12 +25,6 @@ while [[ $1 ]]; do
     continue
   fi
 
-  if ! is_hooked $1; then
-    [[ -n $FUNL_DEBUG ]] && echo "funl-unhook: '$1' isn't registered" >&2
-    shift
-    continue
-  fi
-
   names+=( "$1" )
 
   shift
@@ -42,6 +36,11 @@ if [[ 0 -eq ${#names[@]} ]]; then
 fi
 
 for name in ${names[@]}; do
+  if ! is_hooked $name; then
+    echo "funl: '$name' isn't registered" >&2
+    continue
+  fi
+
   rm -f "$(hook_path $name)"
 
   echo_to_pipe "$(funl feed undef $name)"

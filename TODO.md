@@ -8,13 +8,15 @@ TODO
 
 ## Issues
 
-- [hook/unhook] Improve test case
 - [pipe] Write test
 - [select] Show error message if peco is not installed
   - Put guide to install peco in README.md
+- Actual test suit doesn't test 'funl' shell function
+  - run on zsh and bash
 
 ## Must
 
+- [hook/unhook] should these commands return 1 instead of 0 when error occurred
 - [config] Implement alias for placeholders
   - b: &branch
 - [unhook] Add '--all' option to unregister all hooks
@@ -29,6 +31,7 @@ TODO
 - [select] Add test case when 'src' returns nothing
 - [select] Support both peco and percol
   - Auto detection or configuration in .funlrc file
+- Test part of define/undefine functions on various shell environment
 
 ## Idea/Wish
 
