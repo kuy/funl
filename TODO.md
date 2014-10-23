@@ -15,18 +15,18 @@ TODO
 
 ## Must
 
-- [config] Implement alias for placeholders
-  - b: &branch
 - [select] Support multiple selection
   - Add support command to process multiple selection
     - For example, convert "one item per one item" format to "comma separated" or "space separated"
 - [proc] Define pattern for valid command name
-  - Check on register hooks
+  - Check on register hooks to prevent registering invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
 - [proc] Fill multiple placeholders with same value at once
   - `git branch {branch} origin/{branch}` => `git branch apple origin/apple`
 - [hook/unhook] should these commands return 1 instead of 0 when error occurred
+- [config] Duplicated definition
+  - which definition is used? first or last?
 - Test part of define/undefine functions on various shell environment
 
 ## Idea/Wish

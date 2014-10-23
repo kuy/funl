@@ -27,6 +27,7 @@ CONF
 
 @test "wrong arguments raise error" {
   touch "$HOME/.funlrc"
+
   run funl config "ticket"
   [ "$status" -ne 0 ]
   [ -z "$output" ]
@@ -36,29 +37,32 @@ CONF
   [ -z "$output" ]
 }
 
-@test "invalid type parameter raises error" {
-  touch "$HOME/.funlrc"
-  run funl config "ticket" "hoge"
-  [ "$status" -ne 0 ]
-  [ "$output" == "funl: invalid type: 'hoge'" ]
-}
-
 @test "source definition is required" {
   cat <<CONF > "$HOME/.funlrc"
 nyan.src: bla bla bla
 CONF
+
   run funl config "seq" "src"
   [ "$status" -ne 0 ]
-  [ "$output" == "funl: 'src' definition is required (missing 'seq.src')" ]
+  [ "$output" == "funl: 'seq.src' definition not found" ]
 }
 
 @test "post definition is optional" {
   cat <<CONF > "$HOME/.funlrc"
 lang.src: de en ja
 CONF
+
   run funl config "lang" "post"
   [ "$status" -eq 0 ]
   [ -z "$output" ]
+}
+
+@test "invalid type parameter raises error" {
+  touch "$HOME/.funlrc"
+
+  run funl config "ticket" "hoge"
+  [ "$status" -ne 0 ]
+  [ "$output" == "funl: invalid type: 'hoge'" ]
 }
 
 @test "prints matched config" {
@@ -67,6 +71,7 @@ nyan.src: bla bla bla
 seq.src: foo bar 2000
 seq.post :aaa bbb ccc
 CONF
+
   run funl config "seq" "src"
   [ "$status" -eq 0 ]
   [ "$output" == "foo bar 2000" ]
@@ -74,4 +79,32 @@ CONF
   run funl config "seq" "post"
   [ "$status" -eq 0 ]
   [ "$output" == "aaa bbb ccc" ]
+}
+
+@test "supports alias" {
+  cat <<CONF > "$HOME/.funlrc"
+co.src: hoge hoge hoge
+color.src: red green blue
+color.post: R G B
+c: &color
+CONF
+
+  run funl config "c" "src"
+  [ "$status" -eq 0 ]
+  [ "$output" == "red green blue" ]
+
+  run funl config "c" "post"
+  [ "$status" -eq 0 ]
+  [ "$output" == "R G B" ]
+}
+
+@test "invalid alias" {
+  cat <<CONF > "$HOME/.funlrc"
+c: &color
+CONF
+
+  run funl config "c" "src"
+  echo "$status: $output"
+  [ "$status" -ne 0 ]
+  [ "$output" == "funl: 'color.src' definition not found" ]
 }

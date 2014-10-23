@@ -71,7 +71,7 @@ RC
 
   run funl proc "slct" "{weather}" "and" "{movie}"
   [ "$status" -ne 0 ]
-  [ "$output" == "funl: 'src' definition is required (missing 'movie.src')" ]
+  [ "$output" == "funl: 'movie.src' definition not found" ]
 }
 
 @test "error occurring in post-process" {

@@ -22,16 +22,24 @@ if [[ ! -e $FUNL_CONFIG ]]; then
 fi
 
 if [[ 0 -eq $# ]]; then
-  echo $(cat "$FUNL_CONFIG" | grep -o '[ ]*.*.src[ ]*:' | sed -e 's/.src[ ]*://' | sed -e 's/[ ]//g')
+  echo $(cat "$FUNL_CONFIG" | grep -o '[ ]*.*.src[ ]*:' | sed -e 's/.src[ ]*://' | sed 's/[ ]//g')
   exit 0
 fi
 
-line=$(cat "$FUNL_CONFIG" | grep -E "^$1\\.$2 *:" | head -n 1)
+# Find alias
+alias=$(cat "$FUNL_CONFIG" | grep -E "[ ]*$1[ ]*:[ ]*&" | grep -oE '&[[:alnum:]_-]+' | sed 's/&//g' | head -n 1)
+if [[ ! -z $alias ]]; then
+  name="$alias"
+else
+  name="$1"
+fi
+
+line=$(cat "$FUNL_CONFIG" | grep -E "^$name\\.$2 *:" | head -n 1)
 if [[ -z $line ]]; then
   case "$2" in
     # required
     src )
-      echo "funl: 'src' definition is required (missing '$1.$2')" >&2
+      echo "funl: '$name.$2' definition not found" >&2
       exit 1
       ;;
     # optional
@@ -46,6 +54,6 @@ if [[ -z $line ]]; then
   esac
 fi
 
-line=$(echo "$line" | sed -e "s/$1.$2 *: *//")
+line=$(echo "$line" | sed -e "s/$name.$2 *: *//")
 
 echo "$line"
