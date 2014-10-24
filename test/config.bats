@@ -12,17 +12,31 @@ setup() {
   [ "$output" == "funl: config not found" ]
 }
 
-@test "no arguments print defined placeholders" {
+@test "no arguments print placeholder and alias names" {
   cat <<CONF > "$HOME/.funlrc"
-apple.src: bla bla bla
+cherry.src :aaa bbb ccc
+b: &banana
 banana.src: foo bar 2000
 banana.post: foo bar 2000
-cherry.src :aaa bbb ccc
+apple.src: bla bla bla
+a: &apple
 CONF
 
   run funl config
+  echo "$status: $output"
   [ "$status" -eq 0 ]
-  [ "$output" == "apple banana cherry" ]
+  [ "$output" == "apple banana cherry a b" ]
+}
+
+@test "config has 1 placeholder" {
+  cat <<CONF > "$HOME/.funlrc"
+apple.src: bla bla bla
+CONF
+
+  run funl config
+  echo "$status: $output"
+  [ "$status" -eq 0 ]
+  [ "$output" == "apple" ]
 }
 
 @test "wrong arguments raise error" {

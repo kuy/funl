@@ -3,7 +3,7 @@
 DESC=$(cat <<TEXT
 Usage: funl config
 
-Show available placeholders.
+Show available placeholder and alias names.
 TEXT
 )
 
@@ -22,18 +22,28 @@ if [[ ! -e $FUNL_CONFIG ]]; then
 fi
 
 if [[ 0 -eq $# ]]; then
-  echo $(cat "$FUNL_CONFIG" | grep -o '[ ]*.*.src[ ]*:' | sed -e 's/.src[ ]*://' | sed 's/[ ]//g')
+  names=()
+  placeholders="$(cat "$FUNL_CONFIG" | grep -o '[ ]*.*.src[ ]*:' | sed -e 's/.src[ ]*://' | sed 's/[ ]//g' | sort)"
+  for name in "$placeholders"; do
+    names+=( "$name" )
+  done
+  aliases="$(cat "$FUNL_CONFIG" | grep -o '[ ]*.*[ ]*:[ ]*&' | sed -e 's/[ ]*:[ ]*&//' | sed 's/[ ]//g' | sort)"
+  for name in "$aliases"; do
+    names+=( "$name" )
+  done
+  echo ${names[@]}
   exit 0
 fi
 
 # Find alias
 alias=$(cat "$FUNL_CONFIG" | grep -E "[ ]*$1[ ]*:[ ]*&" | grep -oE '&[[:alnum:]_-]+' | sed 's/&//g' | head -n 1)
-if [[ ! -z $alias ]]; then
+if [[ $alias ]]; then
   name="$alias"
 else
   name="$1"
 fi
 
+# Find definition
 line=$(cat "$FUNL_CONFIG" | grep -E "^$name\\.$2 *:" | head -n 1)
 if [[ -z $line ]]; then
   case "$2" in
