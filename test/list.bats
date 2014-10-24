@@ -33,16 +33,17 @@ USAGE
 
 @test "prints registered commands" {
   touch "$FUNL_HOOKS/foo"
+  touch "$FUNL_HOOKS/apple"
   touch "$FUNL_HOOKS/bar"
 
   run funl list
   [ "$status" -eq 0 ]
-  [ "$output" == "bar, foo" ]
+  [ "$output" == "apple bar foo" ]
 }
 
 @test "with '-1' option prints one command per one line" {
-  touch "$FUNL_HOOKS/apple"
   touch "$FUNL_HOOKS/banana"
+  touch "$FUNL_HOOKS/apple"
   touch "$FUNL_HOOKS/cherry"
 
   run funl list -1

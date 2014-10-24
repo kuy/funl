@@ -28,13 +28,16 @@ if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
 
-if [[ $opt_one -eq 1 ]]; then
-  ls_opt='-1'
-else
-  ls_opt='-m'
-fi
+names=()
+hooks=$(command ls -1 "$FUNL_HOOKS" | sort)
+for hook in "${hooks}"; do
+  names+=( "$hook" )
+done
 
-hooks=$(command ls "$ls_opt" "$FUNL_HOOKS")
-if [[ ! -z $hooks ]]; then
-  echo -e "$hooks"
+if [[ 0 -lt ${#names[@]} ]]; then
+  if [[ $opt_one -eq 1 ]]; then
+    echo -e "${names[@]}"
+  else
+    echo ${names[@]}
+  fi
 fi
