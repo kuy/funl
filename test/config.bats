@@ -6,10 +6,27 @@ setup() {
   mkdir -p "$HOME"
 }
 
+HELP_CONTENT="$(cat <<USAGE
+Usage: funl config
+
+Show available placeholder and alias names.
+USAGE
+)"
+
 @test "no config raises error" {
   run funl config "ticket" "src"
   [ "$status" -ne 0 ]
   [ "$output" == "funl: config not found" ]
+}
+
+@test "'-h' or '--help' options print usage" {
+  run funl config -h
+  [ "$status" -eq 0 ]
+  [ "$output" == "$HELP_CONTENT" ]
+
+  run funl config --help
+  [ "$status" -eq 0 ]
+  [ "$output" == "$HELP_CONTENT" ]
 }
 
 @test "no arguments print placeholder and alias names" {

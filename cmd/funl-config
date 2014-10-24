@@ -7,9 +7,17 @@ Show available placeholder and alias names.
 TEXT
 )
 
-if [[ 1 -eq $# ]] || [[ 3 -le $# ]]; then
-  [[ -n $FUNL_DEBUG ]] && echo "funl-config: wrong arguments" >&2
+if [[ 3 -le $# ]]; then
   exit 1
+fi
+
+if [[ 1 -eq $# ]]; then
+  if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
+    echo -e "$DESC"
+    exit 0
+  else
+    exit 1
+  fi
 fi
 
 if [[ -z $FUNL_CONFIG ]]; then
