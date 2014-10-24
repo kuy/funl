@@ -10,6 +10,7 @@ TEXT
 )
 
 opt_one=0
+
 while [[ $1 ]]; do
   if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
     echo -e "$DESC"

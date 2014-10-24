@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 DESC=$(cat <<TEXT
-Usage: funl config
+Usage: funl config [-1]
 
 Show available placeholder and alias names.
+If '-1' option is specified, funl lists one name per one line.
 TEXT
 )
 
@@ -11,13 +12,22 @@ if [[ 3 -le $# ]]; then
   exit 1
 fi
 
+opt_one=0
+
 if [[ 1 -eq $# ]]; then
-  if [[ $1 == '-h' ]] || [[ $1 == '--help' ]]; then
-    echo -e "$DESC"
-    exit 0
-  else
-    exit 1
-  fi
+  case "$1" in
+    '-h' | '--help' )
+      echo -e "$DESC"
+      exit 0
+      ;;
+    '-1' )
+      opt_one=1
+      shift
+      ;;
+    * )
+      exit 1
+      ;;
+  esac
 fi
 
 if [[ -z $FUNL_CONFIG ]]; then
@@ -33,13 +43,17 @@ if [[ 0 -eq $# ]]; then
   names=()
   placeholders="$(cat "$FUNL_CONFIG" | grep -o '[ ]*.*.src[ ]*:' | sed -e 's/.src[ ]*://' | sed 's/[ ]//g' | sort)"
   for name in "$placeholders"; do
-    names+=( "$name" )
+    names+=( $name )
   done
   aliases="$(cat "$FUNL_CONFIG" | grep -o '[ ]*.*[ ]*:[ ]*&' | sed -e 's/[ ]*:[ ]*&//' | sed 's/[ ]//g' | sort)"
   for name in "$aliases"; do
-    names+=( "$name" )
+    names+=( $name )
   done
-  echo ${names[@]}
+  if [[ $opt_one -eq 1 ]]; then
+    printf -- '%s\n' "${names[@]}"
+  else
+    echo ${names[@]}
+  fi
   exit 0
 fi
 

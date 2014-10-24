@@ -7,9 +7,10 @@ setup() {
 }
 
 HELP_CONTENT="$(cat <<USAGE
-Usage: funl config
+Usage: funl config [-1]
 
 Show available placeholder and alias names.
+If '-1' option is specified, funl lists one name per one line.
 USAGE
 )"
 
@@ -45,7 +46,30 @@ CONF
   [ "$output" == "apple banana cherry a b" ]
 }
 
-@test "config has 1 placeholder" {
+@test "'-1' option prints line by line" {
+  cat <<CONF > "$HOME/.funlrc"
+cherry.src :aaa bbb ccc
+b: &banana
+banana.src: foo bar 2000
+banana.post: foo bar 2000
+apple.src: bla bla bla
+a: &apple
+CONF
+
+  run funl config -1
+  echo "$status: $output"
+  [ "$status" -eq 0 ]
+  [ "$output" == "$(cat <<OUTPUT
+apple
+banana
+cherry
+a
+b
+OUTPUT
+  )" ]
+}
+
+@test "only 1 placeholder" {
   cat <<CONF > "$HOME/.funlrc"
 apple.src: bla bla bla
 CONF

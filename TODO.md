@@ -13,7 +13,7 @@ TODO
   - Put guide to install peco in README.md
 - Actual test suit doesn't test 'funl' shell function
   - run on zsh and bash
-- [hook/unhook] should these commands return 1 instead of 0 when error occurred?
+- [hook/unhook] Should these commands return 1 instead of 0 when error occurred?
 - Test case for 'util' script
 
 ## Must
@@ -35,9 +35,6 @@ TODO
 - `git diff {branch} {branch} Gemfile`
   - Select different branch for each placeholder
   - Provide option to this problem
-- [list/config] Same format for listing items
-  - Use space as common delimiter
-- [config] '-1' option to print one item per one line
 - Project specific configuration
   - Nearest .funlrc file is used, and fallback to global config
 - [funl] Add `funl upgrade` command for self updating
