@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Fix array index for ZSH
+if [[ $ZSH_NAME == "zsh" ]];then
+  setopt localoptions ksharrays
+fi
+
 if [[ -z $FUNL_HOOKS ]]; then
   FUNL_HOOKS="$FUNL_ROOT/hooks"
 fi
@@ -23,6 +28,9 @@ is_banned() {
   return 1
 }
 
+
+# DATA STREAM MODULE
+
 BUFFER=""
 
 echo_to_pipe() {
@@ -35,4 +43,37 @@ exit_with() {
     echo "$1" >"$opt_pipe/code"
   fi
   exit $1
+}
+
+
+# CACHE MODULE
+
+CACHE=()
+
+cache_clear() {
+  local i=0
+  for entry in ${CACHE[@]}; do
+    if [[ $entry =~ "$1=" ]]; then
+      unset -v "CACHE[$i]"
+      return 0
+    fi
+    (( i ++ ))
+  done
+  return 1
+}
+
+cache_set() {
+  cache_clear "$1"
+  CACHE+=( "$1=$2" )
+  return 0
+}
+
+cache_get() {
+  for entry in ${CACHE[@]}; do
+    if [[ $entry =~ "$1=" ]]; then
+      echo "$(echo $entry | awk -F= '{ print $2 }')"
+      return 0
+    fi
+  done
+  return 1
 }

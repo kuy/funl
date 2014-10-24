@@ -8,10 +8,13 @@ TODO
 
 ## Issues
 
+- Error `echo "{color} {color}" {color}`
 - [select] Show error message if peco is not installed
   - Put guide to install peco in README.md
 - Actual test suit doesn't test 'funl' shell function
   - run on zsh and bash
+- [hook/unhook] should these commands return 1 instead of 0 when error occurred?
+- Test case for 'util' script
 
 ## Must
 
@@ -22,15 +25,16 @@ TODO
   - Check on register hooks to prevent registering invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
-- [proc] Fill multiple placeholders with same value at once
-  - `git branch {branch} origin/{branch}` => `git branch apple origin/apple`
-- [hook/unhook] should these commands return 1 instead of 0 when error occurred
 - [config] Duplicated definition
   - which definition is used? first or last?
-- Test part of define/undefine functions on various shell environment
 
 ## Idea/Wish
 
+- Improve `funl --version` result
+  - tag with revision
+- `git diff {branch} {branch} Gemfile`
+  - Select different branch for each placeholder
+  - Provide option to this problem
 - [list/config] Same format for listing items
   - Use space as common delimiter
 - [config] '-1' option to print one item per one line

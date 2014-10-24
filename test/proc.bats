@@ -48,7 +48,6 @@ RC
   stub_peco 1
 
   run funl proc "slct" "{animal}" "is animal"
-  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "slct: _cat_ is animal" ]
 }
@@ -59,9 +58,30 @@ RC
   stub_peco 2
 
   run funl proc "slct" "{animal}" "and" "{weather}"
-  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "slct: _dog_ and rainy" ]
+}
+
+@test "fills same placeholders with same values at once" {
+  cmd_path="$FUNL_STUB_BIN/funl_post"
+  cat <<SH > "$cmd_path"
+#!/usr/bin/env bash
+mv "\$HOME/.funlrc" "\$HOME/.funlrc.orig"
+cat <&0
+SH
+  chmod +x "$cmd_path"
+
+  cat <<RC > "$HOME/.funlrc"
+animal.src: echo -e "cat\ndog\nmonkey"
+animal.post: funl_post
+RC
+  stub_command 'slct'
+  stub_peco 3
+
+  run funl proc "slct" "{animal}" "and" "{animal}"
+  echo "$status: $output"
+  [ "$status" -eq 0 ]
+  [ "$output" == "slct: monkey and monkey" ]
 }
 
 @test "no placeholder definition" {

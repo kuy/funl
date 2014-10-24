@@ -5,21 +5,28 @@ if [[ 0 -eq $# ]]; then
   exit 1
 fi
 
+. "$FUNL_ROOT/lib/utils"
+
 params=()
 for param in "$@"; do
   name=$(echo "$param" | grep -o '{\w\+}' | sed -e 's/[{}]//g')
   if [[ -z $name ]]; then
     params+=( "$param" )
   else
-    choice=$(funl select "$name")
-    if [[ 0 -ne $? ]]; then
-      exit 1
-    fi
+    choice=$(cache_get "$name")
+    if [[ -z $choice ]]; then
+      choice=$(funl select "$name")
+      if [[ 0 -ne $? ]]; then
+        exit 1
+      fi
 
-    choice=$(funl post-proc "$name" "$choice")
-    if [[ 0 -ne $? ]]; then
-      echo "funl: error occured in post-process '$name.post'" >&2
-      exit 1
+      choice=$(funl post-proc "$name" "$choice")
+      if [[ 0 -ne $? ]]; then
+        echo "funl: error occured in post-process '$name.post'" >&2
+        exit 1
+      fi
+
+      cache_set "$name" "$choice"
     fi
 
     script="s;{$name};$choice;g"
