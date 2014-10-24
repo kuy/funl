@@ -9,28 +9,34 @@ fi
 
 params=()
 for param in "$@"; do
-  name=$(echo "$param" | grep -o '{\w\+}' | sed -e 's/[{}]//g')
-  if [[ -z $name ]]; then
+  names=$(echo "$param" | grep -o '{[^}]\+}' | sed -e 's/[{}]//g' | uniq)
+  if [[ -z $names ]]; then
     params+=( "$param" )
   else
-    choice=$(cache_get "$name")
-    if [[ -z $choice ]]; then
-      choice=$(funl select "$name")
-      if [[ 0 -ne $? ]]; then
-        exit 1
+    for name in $(echo -e "$names"); do
+      if [[ -z $name ]]; then
+        params+=( "$param" )
+      else
+        choice=$(cache_get "$name")
+        if [[ -z $choice ]]; then
+          choice=$(funl select "$name")
+          if [[ 0 -ne $? ]]; then
+            exit 1
+          fi
+
+          choice=$(funl post-proc "$name" "$choice")
+          if [[ 0 -ne $? ]]; then
+            echo "funl: error occured in post-process '$name.post'" >&2
+            exit 1
+          fi
+
+          cache_set "$name" "$choice"
+        fi
+
+        script="s;{$name};$choice;g"
+        params+=( "$(echo "$param" | sed -e "$script")" )
       fi
-
-      choice=$(funl post-proc "$name" "$choice")
-      if [[ 0 -ne $? ]]; then
-        echo "funl: error occured in post-process '$name.post'" >&2
-        exit 1
-      fi
-
-      cache_set "$name" "$choice"
-    fi
-
-    script="s;{$name};$choice;g"
-    params+=( "$(echo "$param" | sed "$script")" )
+    done
   fi
 done
 

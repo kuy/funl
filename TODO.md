@@ -8,28 +8,31 @@ TODO
 
 ## Issues
 
-- Error `echo "{color} {color}" {color}`
 - [select] Show error message if peco is not installed
   - Put guide to install peco in README.md
 - Actual test suit doesn't test 'funl' shell function
   - run on zsh and bash
-- [hook/unhook] Should these commands return 1 instead of 0 when error occurred?
 - Test case for 'util' script
 
 ## Must
 
-- [select] Support multiple selection
-  - Add support command to process multiple selection
-    - For example, convert "one item per one item" format to "comma separated" or "space separated"
+- [funl] Add `funl upgrade` command for self updating
+  - Prepare '--edge' option to grab latest version
 - [proc] Define pattern for valid command name
   - Check on register hooks to prevent registering invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
 - [config] Duplicated definition
   - which definition is used? first or last?
+- [select] Support both peco and percol
+  - Auto detection or configuration in .funlrc file
 
 ## Idea/Wish
 
+- [select] Support multiple selection
+  - Add support command to process multiple selection
+    - For example, convert "one item per one item" format to "comma separated" or "space separated"
+- [hook/unhook] Should these commands return 1 instead of 0 when error occurred?
 - Improve `funl --version` result
   - tag with revision
 - `git diff {branch} {branch} Gemfile`
@@ -37,12 +40,7 @@ TODO
   - Provide option to this problem
 - Project specific configuration
   - Nearest .funlrc file is used, and fallback to global config
-- [funl] Add `funl upgrade` command for self updating
-  - Prepare '--edge' option to grab latest version
-- [select] Support both peco and percol
-  - Auto detection or configuration in .funlrc file
 - [select] Option to auto-select if only one option is available
-- [list] Sort by name for consistent output
 - Utility command to define static 'src'
   - `funl gen "apple" "banana" "cherry"` => `echo -e "apple\\nbanana\\ncherry"`
 - Syntax for inserting value without peco's interaction

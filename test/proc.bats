@@ -62,6 +62,16 @@ RC
   [ "$output" == "slct: _dog_ and rainy" ]
 }
 
+@test "processes 2 placeholders in one argument" {
+  prepare_config
+  stub_command 'slct'
+  stub_peco 2
+
+  run funl proc "slct" "{animal}, {animal}" "and" "{animal}"
+  [ "$status" -eq 0 ]
+  [ "$output" == "slct: _dog_, _dog_ and _dog_" ]
+}
+
 @test "fills same placeholders with same values at once" {
   cmd_path="$FUNL_STUB_BIN/funl_post"
   cat <<SH > "$cmd_path"
