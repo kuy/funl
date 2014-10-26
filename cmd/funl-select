@@ -11,11 +11,23 @@ if [[ 0 -ne $? ]]; then
   exit 1
 fi
 
-# TODO: Support both peco and percol (self-modifying for speed?)
-selected=$(eval "$src | peco" 2>&1)
-if [[ 0 -ne $? ]]; then
-  [[ -n $FUNL_DEBUG ]] && echo "funl-select: failed in 'src' or peco" >&2
+if [[ -z $FUNL_SELECTOR ]]; then
+  FUNL_SELECTOR="peco"
+fi
+
+if ! type "$FUNL_SELECTOR" >/dev/null 2>&1; then
+  echo "funl: peco/percol is not available" >&2
   exit 1
 fi
+
+set -o pipefail
+
+selected=$(eval "$src 2>/dev/null | $FUNL_SELECTOR 2>&1")
+if [[ 0 -ne $? ]] || [[ -z $selected ]]; then
+  [[ -n $FUNL_DEBUG ]] && echo "funl-select: failed in 'src' or peco/percol" >&2
+  exit 1
+fi
+
+set +o pipefail
 
 echo "$selected"

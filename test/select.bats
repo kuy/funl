@@ -36,6 +36,7 @@ RC
   stub_peco 3
 
   run funl select animal
+  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "monkey" ]
 }
@@ -53,6 +54,18 @@ RC
   cat <<RC > "$HOME/.funlrc"
 animal.src: obviously invalid 'src' definition
 RC
+  stub_peco 2
+
+  run funl select animal
+  [ "$status" -ne 0 ]
+  [ -z "$output" ]
+}
+
+@test "blank 'src' definition raises error" {
+  cat <<RC > "$HOME/.funlrc"
+animal.src:
+RC
+  stub_peco 2
 
   run funl select animal
   [ "$status" -ne 0 ]
@@ -63,9 +76,18 @@ RC
   cat <<RC > "$HOME/.funlrc"
 color.src: echo ""
 RC
+  stub_peco 1
 
   run funl select color
-  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ -z "$output" ]
+}
+
+@test "detects that peco isn't installed" {
+  prepare_config
+
+  run funl select animal
+  echo "$status: $output"
+  [ "$status" -ne 0 ]
+  [ "$output" == "funl: peco/percol is not available" ]
 }

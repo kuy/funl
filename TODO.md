@@ -8,11 +8,15 @@ TODO
 
 ## Issues
 
-- [select] Show error message if peco is not installed
-  - Put guide to install peco in README.md
+- [select] Support both peco and percol
+- Put guide to install peco in README.md
 - Actual test suit doesn't test 'funl' shell function
   - run on zsh and bash
-- Test case for 'util' script
+- Test case for 'utils' script
+
+## Limitations
+
+- Doesn't support result which contains new lines
 
 ## Must
 
@@ -22,10 +26,9 @@ TODO
   - Check on register hooks to prevent registering invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
+  - Provide option to this
 - [config] Duplicated definition
-  - which definition is used? first or last?
-- [select] Support both peco and percol
-  - Auto detection or configuration in .funlrc file
+  - Which definition is used? first or last?
 
 ## Idea/Wish
 
