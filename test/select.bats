@@ -36,7 +36,6 @@ RC
   stub_peco 3
 
   run funl select animal
-  echo "$status: $output"
   [ "$status" -eq 0 ]
   [ "$output" == "monkey" ]
 }
@@ -87,7 +86,20 @@ RC
   prepare_config
 
   run funl select animal
-  echo "$status: $output"
   [ "$status" -ne 0 ]
   [ "$output" == "funl: peco/percol is not available" ]
+}
+
+@test "use 'FUNL_SELECTOR' to tell yet another selector" {
+  prepare_config
+  stub_peco 3
+  mv "$FUNL_STUB_BIN/peco" "$FUNL_STUB_BIN/ocep"
+
+  FUNL_SELECTOR="$FUNL_STUB_BIN/ocep" run funl select animal
+  [ "$status" -eq 0 ]
+  [ "$output" == "monkey" ]
+
+  FUNL_SELECTOR="ocep" run funl select animal
+  [ "$status" -eq 0 ]
+  [ "$output" == "monkey" ]
 }

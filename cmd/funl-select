@@ -22,7 +22,7 @@ fi
 
 set -o pipefail
 
-selected=$(eval "$src 2>/dev/null | $FUNL_SELECTOR 2>&1")
+selected=$(eval "$src 2>/dev/null | $FUNL_SELECTOR")
 if [[ 0 -ne $? ]] || [[ -z $selected ]]; then
   [[ -n $FUNL_DEBUG ]] && echo "funl-select: failed in 'src' or peco/percol" >&2
   exit 1

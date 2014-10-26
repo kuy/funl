@@ -8,8 +8,6 @@ TODO
 
 ## Issues
 
-- [select] Support both peco and percol
-- Put guide to install peco in README.md
 - Actual test suit doesn't test 'funl' shell function
   - run on zsh and bash
 - Test case for 'utils' script
@@ -22,8 +20,7 @@ TODO
 
 - [funl] Add `funl upgrade` command for self updating
   - Prepare '--edge' option to grab latest version
-- [proc] Define pattern for valid command name
-  - Check on register hooks to prevent registering invalid command names
+- [proc] Validate on register hooks to prevent invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
   - Provide option to this
@@ -32,6 +29,7 @@ TODO
 
 ## Idea/Wish
 
+- Testing basic functions with real peco/percol
 - [select] Support multiple selection
   - Add support command to process multiple selection
     - For example, convert "one item per one item" format to "comma separated" or "space separated"

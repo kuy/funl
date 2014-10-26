@@ -9,7 +9,7 @@ fi
 
 params=()
 for param in "$@"; do
-  names=$(echo "$param" | grep -o '{[^}]\+}' | sed -e 's/[{}]//g' | uniq)
+  names=$(echo -e "$param" | grep -o '{[^}]\+}' | sed -e 's/[{}]//g' | uniq)
   if [[ -z $names ]]; then
     params+=( "$param" )
   else
@@ -34,7 +34,7 @@ for param in "$@"; do
         fi
 
         script="s;{$name};$choice;g"
-        params+=( "$(echo "$param" | sed -e "$script")" )
+        params+=( "$(echo -e "$param" | sed -e "$script")" )
       fi
     done
   fi
