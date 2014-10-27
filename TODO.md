@@ -18,14 +18,17 @@ TODO
 
 ## Must
 
-- [funl] Add `funl upgrade` command for self updating
-  - Prepare '--edge' option to grab latest version
+- [upgrade] Prepare '--edge' option to grab latest master
+- [version] Improve `funl --version` result
+  - tag with revision
 - [proc] Validate on register hooks to prevent invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
   - Provide option to this
 - [config] Duplicated definition
   - Which definition is used? first or last?
+- Move all tasks to GitHub issues
+  - and setup milestones
 
 ## Idea/Wish
 
@@ -34,8 +37,6 @@ TODO
   - Add support command to process multiple selection
     - For example, convert "one item per one item" format to "comma separated" or "space separated"
 - [hook/unhook] Should these commands return 1 instead of 0 when error occurred?
-- Improve `funl --version` result
-  - tag with revision
 - `git diff {branch} {branch} Gemfile`
   - Select different branch for each placeholder
   - Provide option to this problem

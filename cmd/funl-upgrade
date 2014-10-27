@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+
+DESC=$(cat <<TEXT
+Usage: funl upgrade [--edge]
+
+Upgrades 'funl' itself to latest stable version.
+Use '--edge' option to upgrade to latest master.
+TEXT
+)
+
+opt_edge=0
+
+while [[ $1 ]]; do
+  case "$1" in
+    '-h' | '--help' )
+      echo -e "$DESC"
+      exit 0
+      ;;
+    '--edge' )
+      opt_edge=1
+      ;;
+  esac
+
+  shift
+done
+
+if ! type git >/dev/null 2>&1; then
+  echo "funl: 'git' command is required to self-upgrade" >&2
+  exit 1
+fi
+
+if [[ ! -d "$FUNL_ROOT/.git" ]]; then
+  echo "funl: git repository not found" >&2
+  exit 1
+fi
+
+before="$(funl version)"
+
+pushd "$FUNL_ROOT" >/dev/null 2>&1
+git fetch -q 2>&1
+if [[ $opt_edge -eq 1 ]]; then
+  git pull --rebase -q origin master 2>&1
+else
+  tag="$(git for-each-ref --format='%(refname)' --sort=-committerdate refs/tags | sed -e 's:refs/tags/::' | head -n 1)"
+  git checkout "$tag" >/dev/null 2>&1
+fi
+popd >/dev/null 2>&1
+
+after="$(funl version)"
+
+if [[ $before == $after ]]; then
+  echo "funl: up-to-date. no updates available"
+else
+  echo "funl: updated to $after"
+fi
