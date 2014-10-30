@@ -8,6 +8,11 @@ TODO
 
 ## Issues
 
+- Write test for funl-version
+  - ダミーのgitリポジトリを作るために何か工夫が必要
+  - FUNL_ROOTを実際のgitリポジトリにしてはいけない
+  - テンポラリディレクトリをFUNL_ROOTにして、それでも動くように本体を修正する
+- `funl list` raises error if 'hooks' dir is not exist
 - Actual test suit doesn't test 'funl' shell function
   - run on zsh and bash
 - Test case for 'utils' script
@@ -18,9 +23,6 @@ TODO
 
 ## Must
 
-- [upgrade] Prepare '--edge' option to grab latest master
-- [version] Improve `funl --version` result
-  - tag with revision
 - [proc] Validate on register hooks to prevent invalid command names
   - Empty string, symbols, spaces
 - [proc] Ignore placeholders if not defined
